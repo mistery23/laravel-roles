@@ -19,11 +19,13 @@ class CreatePermissionsTable extends Migration
 
         if (!$tableCheck) {
             Schema::connection($connection)->create($table, function (Blueprint $table) {
-                $table->increments('id')->unsigned();
-                $table->string('name');
-                $table->string('slug')->unique();
-                $table->string('description')->nullable();
-                $table->string('model')->nullable();
+                $table->uuid('id')->primary();
+                $table->string('name', 32);
+                $table->string('slug', 32)->unique();
+                $table->string('description', 128)->nullable();
+                $table->string('model', 64)->nullable();
+                $table->uuid('parent_id')->index();
+                $table->foreign('parent_id')->references('id')->on($table)->onDelete('cascade');
                 $table->timestamps();
                 $table->softDeletes();
             });

@@ -19,11 +19,11 @@ class CreateRolesTable extends Migration
 
         if (!$tableCheck) {
             Schema::connection($connection)->create($table, function (Blueprint $table) {
-                $table->increments('id')->unsigned();
-                $table->string('name');
+                $table->uuid('id')->primary();
+                $table->string('name', '64');
                 $table->string('slug')->unique();
-                $table->string('description')->nullable();
-                $table->integer('level')->default(1);
+                $table->string('description', 128)->nullable();
+                $table->smallInteger('level')->default(1);
                 $table->timestamps();
                 $table->softDeletes();
             });

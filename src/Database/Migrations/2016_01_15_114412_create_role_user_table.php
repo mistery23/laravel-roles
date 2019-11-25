@@ -20,11 +20,11 @@ class CreateRoleUserTable extends Migration
 
         if (!$tableCheck) {
             Schema::connection($connection)->create($table, function (Blueprint $table) use ($rolesTable) {
-                $table->increments('id')->unsigned();
-                $table->integer('role_id')->unsigned()->index();
+                $table->uuid('id')->primary();
+                $table->uuid('role_id')->index();
                 $table->foreign('role_id')->references('id')->on($rolesTable)->onDelete('cascade');
-                $table->unsignedBigInteger('user_id')->unsigned()->index();
-                $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+                $table->uuid('user_id')->index();
+                $table->foreign('user_id')->references('id')->on('user_users')->onDelete('cascade');
                 $table->timestamps();
                 $table->softDeletes();
             });

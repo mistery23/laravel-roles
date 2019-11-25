@@ -1,5 +1,5 @@
 {
-    "name": "alexandrbarabolia/laravel-roles",
+    "name": "oleksandrbarabolia/laravel-roles",
     "description": "Powerful package for handling roles, permissions, and levels in Laravel. Supports Laravel 5.3 and higher",
     "keywords": [
         "laravel-roles",
@@ -37,18 +37,18 @@
     },
     "autoload": {
         "psr-4": {
-            "alexandrbarabolia\\LaravelRoles\\": "src/"
+            "jeremykenedy\\LaravelRoles\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "alexandrbarabolia\\LaravelRoles\\Test\\": "tests/"
+            "jeremykenedy\\LaravelRoles\\Test\\": "tests/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "alexandrbarabolia\\LaravelRoles\\RolesServiceProvider"
+                "jeremykenedy\\LaravelRoles\\RolesServiceProvider"
             ]
         }
     },
