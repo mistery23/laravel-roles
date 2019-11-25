@@ -37,18 +37,18 @@
     },
     "autoload": {
         "psr-4": {
-            "jeremykenedy\\LaravelRoles\\": "src/"
+            "alexandrbarabolia\\LaravelRoles\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "jeremykenedy\\LaravelRoles\\Test\\": "tests/"
+            "alexandrbarabolia\\LaravelRoles\\Test\\": "tests/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "jeremykenedy\\LaravelRoles\\RolesServiceProvider"
+                "alexandrbarabolia\\LaravelRoles\\RolesServiceProvider"
             ]
         }
     },
