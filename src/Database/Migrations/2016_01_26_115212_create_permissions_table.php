@@ -24,10 +24,13 @@ class CreatePermissionsTable extends Migration
                 $table->string('slug', 32)->unique();
                 $table->string('description', 128)->nullable();
                 $table->string('model', 64)->nullable();
-                $table->uuid('parent_id')->index();
-                $table->foreign('parent_id')->references('id')->on($table)->onDelete('cascade');
+                $table->uuid('parent_id')->index()->nullable();
                 $table->timestamps();
                 $table->softDeletes();
+            });
+
+            Schema::connection($connection)->table($table, function (Blueprint $table) {
+                $table->foreign('parent_id')->references('id')->on($table)->onDelete('cascade');
             });
         }
     }
