@@ -10,6 +10,9 @@ use jeremykenedy\LaravelRoles\Database\Seeds\DefaultConnectRelationshipsSeeder;
 use jeremykenedy\LaravelRoles\Database\Seeds\DefaultPermissionsTableSeeder;
 use jeremykenedy\LaravelRoles\Database\Seeds\DefaultRolesTableSeeder;
 use jeremykenedy\LaravelRoles\Database\Seeds\DefaultUsersTableSeeder;
+use jeremykenedy\LaravelRoles\Model\Entity\Permission;
+use jeremykenedy\LaravelRoles\Model\Entity\Role;
+use jeremykenedy\LaravelRoles\Model\ReadModels;
 
 class RolesServiceProvider extends ServiceProvider
 {
@@ -34,10 +37,12 @@ class RolesServiceProvider extends ServiceProvider
         $this->app['router']->aliasMiddleware('role', VerifyRole::class);
         $this->app['router']->aliasMiddleware('permission', VerifyPermission::class);
         $this->app['router']->aliasMiddleware('level', VerifyLevel::class);
+
         if (config('roles.rolesGuiEnabled')) {
             $this->loadRoutesFrom(__DIR__.'/routes/web.php');
         }
         $this->loadTranslationsFrom(__DIR__.'/resources/lang/', $this->_packageTag);
+
         $this->registerBladeExtensions();
     }
 
@@ -50,11 +55,19 @@ class RolesServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/config/roles.php', 'roles');
         $this->loadMigrations();
+
         if (config('roles.rolesGuiEnabled')) {
             $this->loadViewsFrom(__DIR__.'/resources/views/', $this->_packageTag);
         }
+
         $this->publishFiles();
         $this->loadSeedsFrom();
+
+        $this->app->bind(Role\Repository\RoleRepositoryInterface::class, Role\Repository\RoleRepository::class);
+        $this->app->bind(ReadModels\RoleQueriesInterface::class, ReadModels\RoleQueries::class);
+
+        $this->app->bind(Permission\Repository\PermissionRepositoryInterface::class, Permission\Repository\PermissionRepository::class);
+        $this->app->bind(ReadModels\PermissionQueriesInterface::class, ReadModels\PermissionQueries::class);
     }
 
     private function loadMigrations()

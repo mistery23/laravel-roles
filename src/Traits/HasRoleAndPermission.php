@@ -192,6 +192,7 @@ trait HasRoleAndPermission
      */
     public function rolePermissions()
     {
+        return [];
         $permissionModel = app(config('roles.models.permission'));
 
         if (!$permissionModel instanceof Model) {
@@ -224,7 +225,8 @@ trait HasRoleAndPermission
      */
     public function getPermissions()
     {
-        return (!$this->permissions) ? $this->permissions = $this->rolePermissions()->get()->merge($this->userPermissions()->get()) : $this->permissions;
+        return [];
+        //return (!$this->permissions) ? $this->permissions = $this->rolePermissions()->get()->merge($this->userPermissions()->get()) : $this->permissions;
     }
 
     /**

@@ -20,8 +20,8 @@ class CreateRolesTable extends Migration
         if (!$tableCheck) {
             Schema::connection($connection)->create($table, function (Blueprint $table) {
                 $table->uuid('id')->primary();
-                $table->string('name', '64');
-                $table->string('slug')->unique();
+                $table->string('name', 64)->unique();
+                $table->string('slug', 64)->unique();
                 $table->string('description', 128)->nullable();
                 $table->smallInteger('level')->default(1);
                 $table->timestamps();

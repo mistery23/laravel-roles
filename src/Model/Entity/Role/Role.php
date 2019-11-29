@@ -8,7 +8,7 @@ use jeremykenedy\LaravelRoles\Contracts\RoleHasRelations as RoleHasRelationsCont
 use jeremykenedy\LaravelRoles\Traits\DatabaseTraits;
 use jeremykenedy\LaravelRoles\Traits\RoleHasRelations;
 use Ramsey\Uuid\Uuid;
-
+use Webmozart\Assert\Assert;
 
 /**
  * Class Role
@@ -135,5 +135,13 @@ class Role extends Model implements RoleHasRelationsContract
         $this->slug        = $slug;
         $this->level       = $level;
         $this->description = $description;
+    }
+
+    /**
+     * @return void
+     */
+    public function remove(): void
+    {
+        Assert::null($this->deleted_at, 'Role already deleted');
     }
 }

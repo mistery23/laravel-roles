@@ -26,6 +26,7 @@ trait DatabaseTraits
     public function __construct($attributes = [])
     {
         parent::__construct($attributes);
+
         if ($connection = config('roles.connection')) {
             $this->connection = $connection;
         }

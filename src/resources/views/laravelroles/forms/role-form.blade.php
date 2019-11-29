@@ -7,6 +7,6 @@
     </div>
     <div class="col-12 col-md-4">
         @include('laravelroles::laravelroles.forms.partials.role-level-input')
-        @include('laravelroles::laravelroles.forms.partials.role-permissions-select')
+{{--        @include('laravelroles::laravelroles.forms.partials.role-permissions-select')--}}
     </div>
 </div>

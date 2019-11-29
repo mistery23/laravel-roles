@@ -4,6 +4,7 @@ namespace jeremykenedy\LaravelRoles\Traits;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use jeremykenedy\LaravelRoles\Model\Entity\Permission\Permission;
 
 trait RoleHasRelations
 {

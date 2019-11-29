@@ -4,16 +4,24 @@ namespace jeremykenedy\LaravelRoles\App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use jeremykenedy\LaravelRoles\App\Http\Requests\StoreRoleRequest;
+use jeremykenedy\LaravelRoles\App\Http\Requests;
 use jeremykenedy\LaravelRoles\App\Http\Requests\UpdateRoleRequest;
 use jeremykenedy\LaravelRoles\App\Services\RoleFormFields;
+use jeremykenedy\LaravelRoles\Model\ReadModels\RoleQueriesInterface;
+use jeremykenedy\LaravelRoles\Model\UseCases\Role;
 use jeremykenedy\LaravelRoles\Traits\RolesAndPermissionsHelpersTrait;
-use jeremykenedy\LaravelRoles\Traits\RolesUsageAuthTrait;
 
 class LaravelRolesController extends Controller
 {
     use RolesAndPermissionsHelpersTrait;
-    use RolesUsageAuthTrait;
+    //use RolesUsageAuthTrait;
+
+    private $queries;
+
+    public function __construct(RoleQueriesInterface $queries)
+    {
+        $this->queries = $queries;
+    }
 
     /**
      * Show the roles and Permissions dashboard.
@@ -22,9 +30,9 @@ class LaravelRolesController extends Controller
      */
     public function index()
     {
-        $data = $this->getDashboardData();
+        $roles = $this->queries->getAll();
 
-        return view($data['view'], $data['data']);
+        return view('laravelroles::laravelroles.role.index', compact('roles'));
     }
 
     /**
@@ -34,27 +42,31 @@ class LaravelRolesController extends Controller
      */
     public function create()
     {
-        $service = new RoleFormFields();
-        $data = $service->handle();
-
-        return view('laravelroles::laravelroles.crud.roles.create', $data);
+        return view('laravelroles::laravelroles.role.create');
     }
 
     /**
      * Store a newly created role in storage.
      *
-     * @param \jeremykenedy\LaravelRoles\App\Http\Requests\StoreRoleRequest $request
+     * @param Requests\Role\CreateRoleRequest $request
+     * @param Role\Create\Handler             $handler
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRoleRequest $request)
+    public function store(Requests\Role\CreateRoleRequest $request, Role\Create\Handler $handler)
     {
-        $roleData = $request->roleFillData();
-        $rolePermissions = $request->get('permissions');
-        $role = $this->storeRoleWithPermissions($roleData, $rolePermissions);
+        $command = new Role\Create\Command(
+            $request->get('name'),
+            $request->get('slug'),
+            $request->get('level'),
+            $request->get('description'),
+        );
 
-        return redirect()->route('laravelroles::roles.index')
-                            ->with('success', trans('laravelroles::laravelroles.flash-messages.role-create', ['role' => $role->name]));
+        $handler->handle($command);
+
+        return redirect()
+                    ->route('laravelroles::roles.index')
+                    ->with('success', trans('laravelroles::laravelroles.flash-messages.role-create', ['role' => $command->name]));
     }
 
     /**

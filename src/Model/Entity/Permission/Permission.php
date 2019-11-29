@@ -9,6 +9,7 @@ use jeremykenedy\LaravelRoles\Contracts\PermissionHasRelations as PermissionHasR
 use jeremykenedy\LaravelRoles\Traits\DatabaseTraits;
 use jeremykenedy\LaravelRoles\Traits\PermissionHasRelations;
 use Ramsey\Uuid\Uuid;
+use Webmozart\Assert\Assert;
 
 /**
  * Class Permission
@@ -18,6 +19,7 @@ use Ramsey\Uuid\Uuid;
  * @property string $slug
  * @property string $description
  * @property string $model
+ * @property string $parent_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon $deleted_at
@@ -93,16 +95,18 @@ class Permission extends Model implements PermissionHasRelationsContract
     /**
      * @param string $name
      * @param string $slug
-     * @param string $description
-     * @param string $entity
+     * @param string|null $entity
+     * @param string|null $parentId
+     * @param string|null $description
      *
      * @return self
      */
     public static function new(
         string $name,
         string $slug,
-        string $description,
-        string $entity
+        ?string $entity,
+        ?string $parentId,
+        ?string $description
     ): self {
 
         $model = new self();
@@ -110,28 +114,42 @@ class Permission extends Model implements PermissionHasRelationsContract
         $model->id          = Uuid::uuid4();
         $model->name        = $name;
         $model->slug        = $slug;
-        $model->description = $description;
         $model->model       = $entity;
+        $model->parent_id   = $parentId;
+        $model->description = $description;
+
+        return $model;
     }
 
     /**
      * @param string $name
      * @param string $slug
-     * @param string $description
-     * @param string $model
+     * @param string|null $entity
+     * @param string|null $parentId
+     * @param string|null $description
      *
      * @return void
      */
     public function edit(
         string $name,
         string $slug,
-        string $description,
-        string $model
+        ?string $entity,
+        ?string $parentId,
+        ?string $description
     ): void {
 
         $this->name        = $name;
         $this->slug        = $slug;
+        $this->model       = $entity;
+        $this->parent_id   = $parentId;
         $this->description = $description;
-        $this->model       = $model;
+    }
+
+    /**
+     * @return void
+     */
+    public function remove(): void
+    {
+        Assert::null($this->deleted_at, 'Permission already deleted');
     }
 }

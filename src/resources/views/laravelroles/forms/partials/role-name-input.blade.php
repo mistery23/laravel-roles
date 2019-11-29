@@ -3,7 +3,7 @@
         {{ trans("laravelroles::laravelroles.forms.roles-form.role-name.label") }}
     </label>
     <div class="col-12">
-        <input type="text" id="name" name="name" class="form-control" value="{{ $name }}" placeholder="{{ trans('laravelroles::laravelroles.forms.roles-form.role-name.placeholder') }}">
+        <input type="text" id="name" name="name" class="form-control" value="test" placeholder="{{ trans('laravelroles::laravelroles.forms.roles-form.role-name.placeholder') }}">
     </div>
     @if ($errors->has('name'))
         <div class="col-12">
