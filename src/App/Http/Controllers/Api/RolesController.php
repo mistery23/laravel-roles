@@ -136,4 +136,68 @@ class RolesController extends Controller
             'message'   => 'Deleted success role.',
         ], 200);
     }
+
+    /**
+     * @param string $roleId
+     * @param Requests\Role\AttachPermissionRequest $request
+     * @param Role\Attach\Permission\Handler $handler
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function attachPermission(
+        string $roleId,
+        Requests\Role\AttachPermissionRequest $request,
+        Role\Attach\Permission\Handler $handler
+    ) {
+
+        $command = new Role\Attach\Permission\Command(
+            $roleId,
+            $request->get('permission_id')
+        );
+
+        try {
+            $handler->handle($command);
+        } catch (\Exception $e) {
+            return response()
+                ->json(['error' => $e->getMessage()], 400);
+        }
+
+        return response()->json([
+            'code'      => 200,
+            'status'    => 'OK',
+            'message'   => 'Permission attached.',
+        ], 200);
+    }
+
+    /**
+     * @param string $roleId
+     * @param Requests\Role\DetachPermissionRequest $request
+     * @param Role\Detach\Permission\Handler $handler
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function detachPermission(
+        string $roleId,
+        Requests\Role\DetachPermissionRequest $request,
+        Role\Detach\Permission\Handler $handler
+    ) {
+
+        $command = new Role\Detach\Permission\Command(
+            $roleId,
+            $request->get('permission_id')
+        );
+
+        try {
+            $handler->handle($command);
+        } catch (\Exception $e) {
+            return response()
+                ->json(['error' => $e->getMessage()], 400);
+        }
+
+        return response()->json([
+            'code'      => 200,
+            'status'    => 'OK',
+            'message'   => 'Permission detached.',
+        ], 200);
+    }
 }

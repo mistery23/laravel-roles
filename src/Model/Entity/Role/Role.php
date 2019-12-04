@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use jeremykenedy\LaravelRoles\Contracts\RoleHasRelations as RoleHasRelationsContract;
 use jeremykenedy\LaravelRoles\Traits\DatabaseTraits;
 use jeremykenedy\LaravelRoles\Traits\RoleHasRelations;
+use Mistery23\EloquentSmartPushRelations\SmartPushRelations;
 use Ramsey\Uuid\Uuid;
 use Webmozart\Assert\Assert;
 
@@ -24,7 +25,7 @@ use Webmozart\Assert\Assert;
  */
 class Role extends Model implements RoleHasRelationsContract
 {
-    use DatabaseTraits, RoleHasRelations, SoftDeletes;
+    use DatabaseTraits, RoleHasRelations, SmartPushRelations, SoftDeletes;
 
     /**
      * The attributes that should be mutated to dates.
@@ -77,6 +78,7 @@ class Role extends Model implements RoleHasRelationsContract
      * @var string
      */
     public $keyType = 'string';
+
 
     /**
      * Create a new model instance.

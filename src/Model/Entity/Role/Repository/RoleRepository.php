@@ -25,7 +25,7 @@ class RoleRepository implements RoleRepositoryInterface
     }
 
     /**
-     * Add user
+     * Update role
      *
      * @param Role $role
      *
@@ -35,13 +35,13 @@ class RoleRepository implements RoleRepositoryInterface
      */
     public function update(Role $role): void
     {
-        if (false === $role->save()) {
+        if (false === $role->push()) {
             throw new \RuntimeException('Update error.');
         }
     }
 
     /**
-     * Add role
+     * Remove role
      *
      * @param Role $role
      *

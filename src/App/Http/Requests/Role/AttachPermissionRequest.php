@@ -1,11 +1,13 @@
 <?php
 
-namespace jeremykenedy\LaravelRoles\App\Http\Requests;
+
+namespace jeremykenedy\LaravelRoles\App\Http\Requests\Role;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRoleRequest extends FormRequest
+class AttachPermissionRequest extends FormRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -31,10 +33,7 @@ class StoreRoleRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'          => 'required|unique:' . config('roles.rolesTable') . ',name,' . $this->id . ',id',
-            'slug'          => 'required|unique:' . config('roles.rolesTable') . ',slug,' . $this->id . ',id',
-            'description'   => 'nullable|string|max:128',
-            'level'         => 'required|integer',
+            'permission_id' => 'required|string',
         ];
     }
 }

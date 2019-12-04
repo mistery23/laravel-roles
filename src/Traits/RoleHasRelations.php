@@ -5,6 +5,8 @@ namespace jeremykenedy\LaravelRoles\Traits;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use jeremykenedy\LaravelRoles\Model\Entity\Permission\Permission;
+use jeremykenedy\LaravelRoles\Model\Entity\RolePermission;
+use Webmozart\Assert\Assert;
 
 trait RoleHasRelations
 {
@@ -15,7 +17,11 @@ trait RoleHasRelations
      */
     public function permissions()
     {
-        return $this->belongsToMany(config('roles.models.permission'))->withTimestamps();
+        return $this->belongsToMany(
+            config('roles.models.permission'),
+            config('roles.models.permissionRole')
+        )
+            ->withTimestamps();
     }
 
     /**
@@ -25,31 +31,39 @@ trait RoleHasRelations
      */
     public function users()
     {
-        return $this->belongsToMany(config('roles.models.defaultUser'))->withTimestamps();
+        return $this->belongsToMany(
+            config('roles.models.defaultUser'),
+            config('roles.models.userRole')
+        )
+            ->withTimestamps();
     }
 
     /**
      * Attach permission to a role.
      *
-     * @param int|Permission $permission
-     *
-     * @return int|bool
+     * @param string $permissionId
      */
-    public function attachPermission($permission)
+    public function attachPermission($permissionId): void
     {
-        return (!$this->permissions()->get()->contains($permission)) ? $this->permissions()->attach($permission) : true;
+        $flag = $this->permissions->contains($permissionId);
+
+        Assert::false($flag, 'Permission is already attached');
+
+        $this->permissions->add(RolePermission::new($this->id, $permissionId));
     }
 
     /**
      * Detach permission from a role.
      *
-     * @param int|Permission $permission
-     *
-     * @return int
+     * @param string $permissionId
      */
-    public function detachPermission($permission)
+    public function detachPermission($permissionId)
     {
-        return $this->permissions()->detach($permission);
+        $flag = $this->permissions->contains($permissionId);
+
+        Assert::true($flag, 'Permission is not attached');
+
+        $this->detachItem('permissions', $permissionId);
     }
 
     /**
