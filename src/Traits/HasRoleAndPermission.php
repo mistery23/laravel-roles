@@ -3,11 +3,12 @@
 namespace jeremykenedy\LaravelRoles\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
+use jeremykenedy\LaravelRoles\Model\Entity\PermissionUser;
+use jeremykenedy\LaravelRoles\Model\Entity\RolePermission;
 use jeremykenedy\LaravelRoles\Model\Entity\RoleUser;
 use Mistery23\EloquentSmartPushRelations\SmartPushRelations;
 use Webmozart\Assert\Assert;
@@ -16,29 +17,6 @@ trait HasRoleAndPermission
 {
     use SmartPushRelations;
 
-    /**
-     * Property for caching roles.
-     *
-     * @var Collection|null
-     */
-    //protected $roles;
-
-    /**
-     * Property for caching permissions.
-     *
-     * @var Collection|null
-     */
-    protected $permissions;
-
-//    /**
-//     * Get all roles as collection.
-//     *
-//     * @return Collection
-//     */
-//    public function getRoles()
-//    {
-//        return (!$this->roles) ? $this->roles = $this->roles()->get() : $this->roles;
-//    }
 
     /**
      * User belongs to many roles.
@@ -55,13 +33,27 @@ trait HasRoleAndPermission
     }
 
     /**
+     * User belongs to many permissions.
+     *
+     * @return BelongsToMany
+     */
+    public function permissions()
+    {
+        return $this->belongsToMany(
+            config('roles.models.permission'),
+            config('roles.models.userPermission')
+        )
+            ->withTimestamps();
+    }
+
+    /**
      * Attach role to a user.
      *
      * @param string $roleId
      *
      * @return void
      */
-    public function attachRole($roleId)
+    public function attachRole($roleId): void
     {
         $flag = $this->roles->contains($roleId);
 
@@ -77,13 +69,45 @@ trait HasRoleAndPermission
      *
      * @return void
      */
-    public function detachRole($roleId)
+    public function detachRole($roleId): void
     {
         $flag = $this->roles->contains($roleId);
 
         Assert::true($flag, 'Role is not attached');
 
         $this->detachItem('roles', $roleId);
+    }
+
+    /**
+     * Attach permission to a user.
+     *
+     * @param string $permissionId
+     *
+     * @return void
+     */
+    public function attachPermission($permissionId)
+    {
+        $flag = $this->permissions->contains($permissionId);
+
+        Assert::false($flag, 'Permission is already attached');
+
+        $this->permissions->add(PermissionUser::new($this->id, $permissionId));
+    }
+
+    /**
+     * Detach permission from a user.
+     *
+     * @param string $permissionId
+     *
+     * @return void
+     */
+    public function detachPermission($permissionId): void
+    {
+        $flag = $this->permissions->contains($permissionId);
+
+        Assert::true($flag, 'Permission is not attached');
+
+        $this->detachItem('permissions', $permissionId);
     }
 
 
@@ -226,25 +250,9 @@ trait HasRoleAndPermission
             ->groupBy(['permissions.id', 'permissions.name', 'permissions.slug', 'permissions.description', 'permissions.model', 'permissions.created_at', 'permissions.updated_at', 'permissions.deleted_at', 'pivot_created_at', 'pivot_updated_at']);
     }
 
-    /**
-     * User belongs to many permissions.
-     *
-     * @return BelongsToMany
-     */
-    public function userPermissions()
-    {
-        return $this->belongsToMany(config('roles.models.permission'))->withTimestamps();
-    }
 
-    /**
-     * Get all permissions as collection.
-     *
-     * @return Collection
-     */
-    public function getPermissions()
-    {
-        return (!$this->permissions) ? $this->permissions = $this->rolePermissions()->get()->merge($this->userPermissions()->get()) : $this->permissions;
-    }
+
+
 
     /**
      * Check if the user has a permission or permissions.
@@ -361,36 +369,7 @@ trait HasRoleAndPermission
         return false;
     }
 
-    /**
-     * Attach permission to a user.
-     *
-     * @param int|Permission $permission
-     *
-     * @return null|bool
-     */
-    public function attachPermission($permission)
-    {
-        if ($this->getPermissions()->contains($permission)) {
-            return true;
-        }
-        $this->permissions = null;
 
-        return $this->userPermissions()->attach($permission);
-    }
-
-    /**
-     * Detach permission from a user.
-     *
-     * @param int|Permission $permission
-     *
-     * @return int
-     */
-    public function detachPermission($permission)
-    {
-        $this->permissions = null;
-
-        return $this->userPermissions()->detach($permission);
-    }
 
     /**
      * Detach all permissions from a user.

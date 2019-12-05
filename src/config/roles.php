@@ -49,6 +49,7 @@ return [
         'permission'     => env('ROLES_DEFAULT_PERMISSION_MODEL', jeremykenedy\LaravelRoles\Model\Entity\Permission\Permission::class),
         'permissionRole' => env('ROLES_DEFAULT_PERMISSION_MODEL', jeremykenedy\LaravelRoles\Model\Entity\RolePermission::class),
         'userRole'       => env('ROLES_DEFAULT_PERMISSION_MODEL', jeremykenedy\LaravelRoles\Model\Entity\RoleUser::class),
+        'userPermission' => env('ROLES_DEFAULT_PERMISSION_MODEL', jeremykenedy\LaravelRoles\Model\Entity\PermissionUser::class),
         'defaultUser'    => env('ROLES_DEFAULT_USER_MODEL', config('auth.providers.users.model')),
     ],
 

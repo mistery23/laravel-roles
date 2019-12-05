@@ -32,4 +32,6 @@ Route::group([
     //Users
     Route::post('/users/{userId}/roles', 'UsersController@attachRole');
     Route::delete('/users/{userId}/roles', 'UsersController@detachRole');
+    Route::post('/users/{userId}/permissions', 'UsersController@attachPermission');
+    Route::delete('/users/{userId}/permissions', 'UsersController@detachPermission');
 });
