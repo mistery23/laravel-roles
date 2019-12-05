@@ -55,14 +55,14 @@ class Handler
      */
     public function handle(Command $command): void
     {
-        $role = $this->queries->getById($command->id);
+        $perm = $this->queries->getById($command->id);
 
-        $role->remove();
+        $perm->remove();
 
         try {
             $this->db->beginTransaction();
 
-            $this->repository->remove($role);
+            $this->repository->remove($perm);
 
             $this->db->commit();
         } catch (\PDOException $e) {

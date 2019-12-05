@@ -13,5 +13,7 @@ interface PermissionQueriesInterface
 
     public function getBySlug(string $slug): Permission;
 
+    public function exists(string $id): bool;
+
     public function getAll(int $perPage = 20): LengthAwarePaginator;
 }

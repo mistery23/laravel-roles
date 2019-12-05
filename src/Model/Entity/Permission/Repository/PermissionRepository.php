@@ -35,7 +35,7 @@ class PermissionRepository implements PermissionRepositoryInterface
      */
     public function update(Permission $permission): void
     {
-        if (false === $permission->save()) {
+        if (false === $permission->push()) {
             throw new \RuntimeException('Update error.');
         }
     }

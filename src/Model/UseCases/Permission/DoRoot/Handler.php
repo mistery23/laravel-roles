@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace jeremykenedy\LaravelRoles\Model\UseCases\Permission\Edit;
+namespace jeremykenedy\LaravelRoles\Model\UseCases\Permission\DoRoot;
 
 use Illuminate\Support\Facades\DB;
 use jeremykenedy\LaravelRoles\Model\Entity\Permission;
 use jeremykenedy\LaravelRoles\Model\ReadModels\PermissionQueriesInterface;
+use Webmozart\Assert\Assert;
 
 /**
  * Class Handler
@@ -57,13 +58,9 @@ class Handler
     {
         $perm = $this->queries->getById($command->id);
 
-        $perm->edit(
-            $command->name,
-            $command->slug,
-            $command->model,
-            $command->model,
-            $command->description
-        );
+        Assert::notNull($perm->parent_id, 'Permission is already root.');
+
+        $perm->doRoot();
 
         try {
             $this->db->beginTransaction();

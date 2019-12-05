@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace jeremykenedy\LaravelRoles\Model\UseCases\Permission\Edit;
+namespace jeremykenedy\LaravelRoles\Model\UseCases\Permission\DoChild;
 
 use Illuminate\Support\Facades\DB;
 use jeremykenedy\LaravelRoles\Model\Entity\Permission;
 use jeremykenedy\LaravelRoles\Model\ReadModels\PermissionQueriesInterface;
+use Webmozart\Assert\Assert;
 
 /**
  * Class Handler
@@ -57,13 +58,13 @@ class Handler
     {
         $perm = $this->queries->getById($command->id);
 
-        $perm->edit(
-            $command->name,
-            $command->slug,
-            $command->model,
-            $command->model,
-            $command->description
-        );
+        Assert::notEq($perm->parent_id, $command->parentId, 'Permission is already childlike by this parent.');
+
+        $parent = $this->queries->exists($command->parentId);
+
+        Assert::true($parent, 'Parent role isn\'t exists.');
+
+        $perm->doChild($command->parentId);
 
         try {
             $this->db->beginTransaction();

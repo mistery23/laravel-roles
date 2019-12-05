@@ -22,6 +22,13 @@ class PermissionQueries implements PermissionQueriesInterface
         return $permission;
     }
 
+    public function exists(string $id): bool
+    {
+        $permission = Permission::where('id', $id)->exists();
+
+        return $permission;
+    }
+
     public function getAll(int $perPage = 20): LengthAwarePaginator
     {
         $permissions = Permission::withoutTrashed()->orderByDesc('created_at')->paginate($perPage);

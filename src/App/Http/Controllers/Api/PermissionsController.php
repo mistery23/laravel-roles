@@ -156,4 +156,54 @@ class PermissionsController extends Controller
             'message'   => 'Deleted success permission.',
         ], 200);
     }
+
+    public function doChild(
+        string $permissionId,
+        Requests\Permission\DoChildPermissionRequest $request,
+        Permission\DoChild\Handler $handler
+
+    )
+    {
+        $command = new Permission\DoChild\Command(
+            $permissionId,
+            $request->get('parent_id')
+        );
+
+        try {
+            $handler->handle($command);
+        } catch (\Exception $e) {
+            return response()
+                ->json(['error' => $e->getMessage()], 400);
+        }
+
+        return response()->json([
+            'code'      => 200,
+            'status'    => 'OK',
+            'message'   => 'Permission was set childlike.',
+        ], 200);
+    }
+
+    public function doRoot(
+        string $permissionId,
+        Permission\DoRoot\Handler $handler
+
+    )
+    {
+        $command = new Permission\DoRoot\Command(
+            $permissionId,
+        );
+
+        try {
+            $handler->handle($command);
+        } catch (\Exception $e) {
+            return response()
+                ->json(['error' => $e->getMessage()], 400);
+        }
+
+        return response()->json([
+            'code'      => 200,
+            'status'    => 'OK',
+            'message'   => 'Permission was set root.',
+        ], 200);
+    }
 }

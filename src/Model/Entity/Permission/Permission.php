@@ -152,4 +152,22 @@ class Permission extends Model implements PermissionHasRelationsContract
     {
         Assert::null($this->deleted_at, 'Permission already deleted');
     }
+
+    /**
+     * @param string $parentId
+     *
+     * @return void
+     */
+    public function doChild(string $parentId): void
+    {
+        $this->parent_id = $parentId;
+    }
+
+    /**
+     * @return void
+     */
+    public function doRoot(): void
+    {
+        $this->parent_id = null;
+    }
 }
