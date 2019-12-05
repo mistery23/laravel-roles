@@ -8,17 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
-use jeremykenedy\LaravelRoles\Model\Permission;
-use jeremykenedy\LaravelRoles\Model\Role;
+use jeremykenedy\LaravelRoles\Model\Entity\RoleUser;
+use Mistery23\EloquentSmartPushRelations\SmartPushRelations;
+use Webmozart\Assert\Assert;
 
 trait HasRoleAndPermission
 {
+    use SmartPushRelations;
+
     /**
      * Property for caching roles.
      *
      * @var Collection|null
      */
-    protected $roles;
+    //protected $roles;
 
     /**
      * Property for caching permissions.
@@ -27,6 +30,16 @@ trait HasRoleAndPermission
      */
     protected $permissions;
 
+//    /**
+//     * Get all roles as collection.
+//     *
+//     * @return Collection
+//     */
+//    public function getRoles()
+//    {
+//        return (!$this->roles) ? $this->roles = $this->roles()->get() : $this->roles;
+//    }
+
     /**
      * User belongs to many roles.
      *
@@ -34,18 +47,55 @@ trait HasRoleAndPermission
      */
     public function roles()
     {
-        return $this->belongsToMany(config('roles.models.role'))->withTimestamps();
+        return $this->belongsToMany(
+            config('roles.models.role'),
+            config('roles.models.userRole')
+        )
+            ->withTimestamps();
     }
 
     /**
-     * Get all roles as collection.
+     * Attach role to a user.
      *
-     * @return Collection
+     * @param string $roleId
+     *
+     * @return void
      */
-    public function getRoles()
+    public function attachRole($roleId)
     {
-        return (!$this->roles) ? $this->roles = $this->roles()->get() : $this->roles;
+        $flag = $this->roles->contains($roleId);
+
+        Assert::false($flag, 'Role is already attached');
+
+        $this->roles->add(RoleUser::new($this->id, $roleId));
     }
+
+    /**
+     * Detach role from a user.
+     *
+     * @param string $roleId
+     *
+     * @return void
+     */
+    public function detachRole($roleId)
+    {
+        $flag = $this->roles->contains($roleId);
+
+        Assert::true($flag, 'Role is not attached');
+
+        $this->detachItem('roles', $roleId);
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Check if the user has a role or roles.
@@ -119,37 +169,6 @@ trait HasRoleAndPermission
     }
 
     /**
-     * Attach role to a user.
-     *
-     * @param int|Role $role
-     *
-     * @return null|bool
-     */
-    public function attachRole($role)
-    {
-        if ($this->getRoles()->contains($role)) {
-            return true;
-        }
-        $this->roles = null;
-
-        return $this->roles()->attach($role);
-    }
-
-    /**
-     * Detach role from a user.
-     *
-     * @param int|Role $role
-     *
-     * @return int
-     */
-    public function detachRole($role)
-    {
-        $this->roles = null;
-
-        return $this->roles()->detach($role);
-    }
-
-    /**
      * Detach all roles from a user.
      *
      * @return int
@@ -192,7 +211,6 @@ trait HasRoleAndPermission
      */
     public function rolePermissions()
     {
-        return [];
         $permissionModel = app(config('roles.models.permission'));
 
         if (!$permissionModel instanceof Model) {
@@ -225,8 +243,7 @@ trait HasRoleAndPermission
      */
     public function getPermissions()
     {
-        return [];
-        //return (!$this->permissions) ? $this->permissions = $this->rolePermissions()->get()->merge($this->userPermissions()->get()) : $this->permissions;
+        return (!$this->permissions) ? $this->permissions = $this->rolePermissions()->get()->merge($this->userPermissions()->get()) : $this->permissions;
     }
 
     /**

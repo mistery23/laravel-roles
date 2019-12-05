@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use jeremykenedy\LaravelRoles\App\Http\Middleware\VerifyLevel;
 use jeremykenedy\LaravelRoles\App\Http\Middleware\VerifyPermission;
 use jeremykenedy\LaravelRoles\App\Http\Middleware\VerifyRole;
+use jeremykenedy\LaravelRoles\Contracts;
 use jeremykenedy\LaravelRoles\Database\Seeds\DefaultConnectRelationshipsSeeder;
 use jeremykenedy\LaravelRoles\Database\Seeds\DefaultPermissionsTableSeeder;
 use jeremykenedy\LaravelRoles\Database\Seeds\DefaultRolesTableSeeder;
@@ -68,6 +69,9 @@ class RolesServiceProvider extends ServiceProvider
 
         $this->app->bind(Permission\Repository\PermissionRepositoryInterface::class, Permission\Repository\PermissionRepository::class);
         $this->app->bind(ReadModels\PermissionQueriesInterface::class, ReadModels\PermissionQueries::class);
+
+        $this->app->bind(Contracts\UserRepositoryInterface::class, config('roles.dependencies.userRepository'));
+        $this->app->bind(Contracts\UserQueriesInterface::class, config('roles.dependencies.userQueries'));
     }
 
     private function loadMigrations()

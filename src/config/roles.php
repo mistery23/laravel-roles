@@ -15,7 +15,7 @@ return [
 
     'connection'            => env('ROLES_DATABASE_CONNECTION', null),
     'rolesTable'            => env('ROLES_ROLES_DATABASE_TABLE', 'roles'),
-    'roleUserTable'         => env('ROLES_ROLE_USER_DATABASE_TABLE', 'role_user'),
+    'roleUserTable'         => env('ROLES_ROLE_USER_DATABASE_TABLE', 'roles_users'),
     'permissionsTable'      => env('ROLES_PERMISSIONS_DATABASE_TABLE', 'permissions'),
     'permissionsRoleTable'  => env('ROLES_PERMISSION_ROLE_DATABASE_TABLE', 'permissions_roles'),
     'permissionsUserTable'  => env('ROLES_PERMISSION_USER_DATABASE_TABLE', 'permissions_users'),
@@ -45,9 +45,16 @@ return [
     */
 
     'models' => [
-        'role'          => env('ROLES_DEFAULT_ROLE_MODEL', jeremykenedy\LaravelRoles\Model\Entity\Role\Role::class),
-        'permission'    => env('ROLES_DEFAULT_PERMISSION_MODEL', jeremykenedy\LaravelRoles\Model\Entity\Permission\Permission::class),
-        'defaultUser'   => env('ROLES_DEFAULT_USER_MODEL', config('auth.providers.users.model')),
+        'role'           => env('ROLES_DEFAULT_ROLE_MODEL', jeremykenedy\LaravelRoles\Model\Entity\Role\Role::class),
+        'permission'     => env('ROLES_DEFAULT_PERMISSION_MODEL', jeremykenedy\LaravelRoles\Model\Entity\Permission\Permission::class),
+        'permissionRole' => env('ROLES_DEFAULT_PERMISSION_MODEL', jeremykenedy\LaravelRoles\Model\Entity\RolePermission::class),
+        'userRole'       => env('ROLES_DEFAULT_PERMISSION_MODEL', jeremykenedy\LaravelRoles\Model\Entity\RoleUser::class),
+        'defaultUser'    => env('ROLES_DEFAULT_USER_MODEL', config('auth.providers.users.model')),
+    ],
+
+    'dependencies' => [
+        'userRepository' => env('USER_REPOSITORY', ''),
+        'userQueries'    => env('USER_QUERIES', ''),
     ],
 
     /*

@@ -49,6 +49,7 @@ class RoleUser extends Model
      */
     public $keyType = 'string';
 
+
     /**
      * Create a new model instance.
      *
@@ -62,19 +63,19 @@ class RoleUser extends Model
     }
 
     /**
+     * @param string $userId
      * @param string $roleId
-     * @param string $permissionId
      *
      * @return self
      */
-//    public static function new(string $roleId, string $permissionId): self
-//    {
-//        $model = new self();
-//
-//        $model->id            = Uuid::uuid4();
-//        $model->permission_id = $permissionId;
-//        $model->role_id       = $roleId;
-//
-//        return $model;
-//    }
+    public static function new(string $userId, string $roleId): self
+    {
+        $model = new self();
+
+        $model->id      = Uuid::uuid4();
+        $model->user_id = $userId;
+        $model->role_id = $roleId;
+
+        return $model;
+    }
 }
