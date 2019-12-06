@@ -19,7 +19,7 @@ class RoleRepository implements RoleRepositoryInterface
      */
     public function add(Role $role): void
     {
-        if (false === $role->save()) {
+        if (false === $role->push()) {
             throw new \RuntimeException('Save error.');
         }
     }

@@ -8,20 +8,19 @@ use jeremykenedy\LaravelRoles\Contracts\RoleHasRelations as RoleHasRelationsCont
 use jeremykenedy\LaravelRoles\Traits\DatabaseTraits;
 use jeremykenedy\LaravelRoles\Traits\RoleHasRelations;
 use Mistery23\EloquentSmartPushRelations\SmartPushRelations;
-use Ramsey\Uuid\Uuid;
 use Webmozart\Assert\Assert;
 
 /**
  * Class Role
  *
- * @property string $id
- * @property string $name
- * @property string $slug
- * @property string $description
- * @property string $level
- * @property string $created_at
- * @property string $updated_at
- * @property string $deleted_at
+ * @property string  $id
+ * @property string  $name
+ * @property string  $slug
+ * @property string  $description
+ * @property integer $level
+ * @property string  $created_at
+ * @property string  $updated_at
+ * @property string  $deleted_at
  */
 class Role extends Model implements RoleHasRelationsContract
 {
@@ -79,6 +78,11 @@ class Role extends Model implements RoleHasRelationsContract
      */
     public $keyType = 'string';
 
+    /**
+     * @var integer
+     */
+    public static $defaultLevel = 1;
+
 
     /**
      * Create a new model instance.
@@ -93,6 +97,7 @@ class Role extends Model implements RoleHasRelationsContract
     }
 
     /**
+     * @param string      $id
      * @param string      $name
      * @param string      $slug
      * @param int         $level
@@ -101,15 +106,16 @@ class Role extends Model implements RoleHasRelationsContract
      * @return self
      */
     public static function new(
+        string $id,
         string $name,
         string $slug,
         int $level,
-        ?string $description
+        ?string $description = null
     ): self {
 
         $model = new self();
 
-        $model->id          = Uuid::uuid4();
+        $model->id          = $id;
         $model->name        = $name;
         $model->slug        = $slug;
         $model->level       = $level;
@@ -145,5 +151,21 @@ class Role extends Model implements RoleHasRelationsContract
     public function remove(): void
     {
         Assert::null($this->deleted_at, 'Role already deleted');
+    }
+
+    public function copy(string $id, string $name, string $slug): self
+    {
+        $role = Role::new(
+            $id,
+            $name,
+            $slug,
+            Role::$defaultLevel
+        );
+
+        $this->permissions()->allRelatedIds()->map(function ($permId) use (&$role) {
+            $role->attachPermission($permId);
+        });
+
+        return $role;
     }
 }

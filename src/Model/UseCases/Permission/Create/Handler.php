@@ -6,6 +6,7 @@ namespace jeremykenedy\LaravelRoles\Model\UseCases\Permission\Create;
 
 use Illuminate\Support\Facades\DB;
 use jeremykenedy\LaravelRoles\Model\Entity\Permission;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Class Handler
@@ -47,6 +48,7 @@ class Handler
     public function handle(Command $command): void
     {
         $perm = Permission\Permission::new(
+            (string)Uuid::uuid4(),
             $command->name,
             $command->slug,
             $command->model,

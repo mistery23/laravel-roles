@@ -93,6 +93,7 @@ class Permission extends Model implements PermissionHasRelationsContract
     }
 
     /**
+     * @param string $id
      * @param string $name
      * @param string $slug
      * @param string|null $entity
@@ -102,6 +103,7 @@ class Permission extends Model implements PermissionHasRelationsContract
      * @return self
      */
     public static function new(
+        string $id,
         string $name,
         string $slug,
         ?string $entity,
@@ -111,7 +113,7 @@ class Permission extends Model implements PermissionHasRelationsContract
 
         $model = new self();
 
-        $model->id          = Uuid::uuid4();
+        $model->id          = $id;
         $model->name        = $name;
         $model->slug        = $slug;
         $model->model       = $entity;

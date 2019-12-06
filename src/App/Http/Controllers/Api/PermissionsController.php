@@ -187,8 +187,7 @@ class PermissionsController extends Controller
         string $permissionId,
         Permission\DoRoot\Handler $handler
 
-    )
-    {
+    ) {
         $command = new Permission\DoRoot\Command(
             $permissionId,
         );

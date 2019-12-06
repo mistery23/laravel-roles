@@ -16,10 +16,12 @@ Route::group([
     // Roles
     Route::get('/roles', 'RolesController@index');
     Route::post('/roles', 'RolesController@store');
+    Route::get('/roles/permissions', 'RolesController@withPermissions');
     Route::put('/roles/{roleId}', 'RolesController@edit');
     Route::delete('/roles/{roleId}', 'RolesController@destroy');
     Route::post('/roles/{roleId}/permissions', 'RolesController@attachPermission');
     Route::delete('/roles/{roleId}/permissions', 'RolesController@detachPermission');
+    Route::post('/roles/{roleId}/copy', 'RolesController@copy');
 
     // Permissions
     Route::get('/permissions', 'PermissionsController@index');

@@ -36,6 +36,23 @@ class RolesController extends Controller
     }
 
     /**
+     * Return all the roles, Permissions, and Users data.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function withPermissions()
+    {
+        $roles = $this->queries->getAllWithPermissions();
+
+        return response()->json([
+            'code'      => 200,
+            'status'    => 'success',
+            'message'   => 'Success returning all roles with permissions',
+            'data'      => $roles,
+        ], 200);
+    }
+
+    /**
      * Creating a new role.
      *
      * @return \Illuminate\Http\Response
@@ -110,6 +127,42 @@ class RolesController extends Controller
                 'description' => $editedRole->description,
                 'created_at'  => $editedRole->created_at,
                 'updated_at'  => $editedRole->updated_at,
+            ],
+        ], 200);
+    }
+
+    public function copy(
+        string $roleId,
+        Requests\Role\CopyRoleRequest $request,
+        Role\Copy\Handler $handler
+    ) {
+        $command = new Role\Copy\Command(
+            $roleId,
+            $request->get('name'),
+            $request->get('slug')
+        );
+
+        try {
+            $handler->handle($command);
+        } catch (\RuntimeException $e) {
+            return response()
+                ->json(['error' => $e->getMessage()], 400);
+        }
+
+        $replica = $this->queries->getBySlug($command->slug);
+
+        return response()->json([
+            'code'      => 200,
+            'status'    => 'OK',
+            'message'   => 'Success create ' . $replica->slug . ' role.',
+            'data'      => [
+                'id'          => $replica->id,
+                'name'        => $replica->name,
+                'slug'        => $replica->slug,
+                'level'       => $replica->level,
+                'description' => $replica->description,
+                'created_at'  => $replica->created_at,
+                'updated_at'  => $replica->updated_at,
             ],
         ], 200);
     }
