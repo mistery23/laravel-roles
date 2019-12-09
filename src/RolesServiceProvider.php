@@ -14,6 +14,8 @@ use jeremykenedy\LaravelRoles\Database\Seeds\DefaultUsersTableSeeder;
 use jeremykenedy\LaravelRoles\Model\Entity\Permission;
 use jeremykenedy\LaravelRoles\Model\Entity\Role;
 use jeremykenedy\LaravelRoles\Model\ReadModels;
+use jeremykenedy\LaravelRoles\Model\Utils;
+
 
 class RolesServiceProvider extends ServiceProvider
 {
@@ -63,6 +65,8 @@ class RolesServiceProvider extends ServiceProvider
 
         $this->publishFiles();
         $this->loadSeedsFrom();
+
+        $this->app->bind(Utils\SplitterInterface::class, Utils\Splitter::class);
 
         $this->app->bind(Role\Repository\RoleRepositoryInterface::class, Role\Repository\RoleRepository::class);
         $this->app->bind(ReadModels\RoleQueriesInterface::class, ReadModels\RoleQueries::class);

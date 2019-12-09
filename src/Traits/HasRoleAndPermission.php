@@ -6,10 +6,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
-use InvalidArgumentException;
 use jeremykenedy\LaravelRoles\Model\Entity\PermissionUser;
-use jeremykenedy\LaravelRoles\Model\Entity\RolePermission;
 use jeremykenedy\LaravelRoles\Model\Entity\RoleUser;
+use jeremykenedy\LaravelRoles\Model\Utils\SplitterInterface;
 use Mistery23\EloquentSmartPushRelations\SmartPushRelations;
 use Webmozart\Assert\Assert;
 
@@ -110,31 +109,16 @@ trait HasRoleAndPermission
         $this->detachItem('permissions', $permissionId);
     }
 
-
-
-
-
-
-
-
-
-
-
-
     /**
      * Check if the user has a role or roles.
      *
-     * @param int|string|array $role
-     * @param bool             $all
+     * @param string|array $role
+     * @param bool         $all
      *
-     * @return bool
+     * @return boolean
      */
     public function hasRole($role, $all = false)
     {
-        if ($this->isPretendEnabled()) {
-            return $this->pretend('hasRole');
-        }
-
         if (!$all) {
             return $this->hasOneRole($role);
         }
@@ -183,76 +167,14 @@ trait HasRoleAndPermission
      *
      * @param int|string $role
      *
-     * @return bool
+     * @return boolean
      */
     public function checkRole($role)
     {
-        return $this->getRoles()->contains(function ($value) use ($role) {
+        return $this->roles->contains(function ($value) use ($role) {
             return $role == $value->id || Str::is($role, $value->slug);
         });
     }
-
-    /**
-     * Detach all roles from a user.
-     *
-     * @return int
-     */
-    public function detachAllRoles()
-    {
-        $this->roles = null;
-
-        return $this->roles()->detach();
-    }
-
-    /**
-     * Sync roles for a user.
-     *
-     * @param array|\jeremykenedy\LaravelRoles\Model\Role[]|\Illuminate\Database\Eloquent\Collection $roles
-     *
-     * @return array
-     */
-    public function syncRoles($roles)
-    {
-        $this->roles = null;
-
-        return $this->roles()->sync($roles);
-    }
-
-    /**
-     * Get role level of a user.
-     *
-     * @return int
-     */
-    public function level()
-    {
-        return ($role = $this->getRoles()->sortByDesc('level')->first()) ? $role->level : 0;
-    }
-
-    /**
-     * Get all permissions from roles.
-     *
-     * @return Builder
-     */
-    public function rolePermissions()
-    {
-        $permissionModel = app(config('roles.models.permission'));
-
-        if (!$permissionModel instanceof Model) {
-            throw new InvalidArgumentException('[roles.models.permission] must be an instance of \Illuminate\Database\Eloquent\Model');
-        }
-
-        return $permissionModel
-            ::select(['permissions.*', 'permission_role.created_at as pivot_created_at', 'permission_role.updated_at as pivot_updated_at'])
-            ->join('permission_role', 'permission_role.permission_id', '=', 'permissions.id')
-            ->join('roles', 'roles.id', '=', 'permission_role.role_id')
-            ->whereIn('roles.id', $this->getRoles()->pluck('id')->toArray())
-            ->orWhere('roles.level', '<', $this->level())
-            ->groupBy(['permissions.id', 'permissions.name', 'permissions.slug', 'permissions.description', 'permissions.model', 'permissions.created_at', 'permissions.updated_at', 'permissions.deleted_at', 'pivot_created_at', 'pivot_updated_at']);
-    }
-
-
-
-
 
     /**
      * Check if the user has a permission or permissions.
@@ -264,10 +186,6 @@ trait HasRoleAndPermission
      */
     public function hasPermission($permission, $all = false)
     {
-        if ($this->isPretendEnabled()) {
-            return $this->pretend('hasPermission');
-        }
-
         if (!$all) {
             return $this->hasOnePermission($permission);
         }
@@ -316,14 +234,101 @@ trait HasRoleAndPermission
      *
      * @param int|string $permission
      *
-     * @return bool
+     * @return boolean
      */
     public function checkPermission($permission)
     {
-        return $this->getPermissions()->contains(function ($value) use ($permission) {
+        return $this->permissions->contains(function ($value) use ($permission) {
             return $permission == $value->id || Str::is($permission, $value->slug);
         });
     }
+
+
+    /**
+     * Get an array from argument.
+     *
+     * @param int|string|array $argument
+     *
+     * @return array
+     */
+    private function getArrayFrom($argument)
+    {
+        return app(SplitterInterface::class)->getArrayFrom($argument);
+    }
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Detach all roles from a user.
+     *
+     * @return int
+     */
+    public function detachAllRoles()
+    {
+        $this->roles = null;
+
+        return $this->roles()->detach();
+    }
+
+    /**
+     * Sync roles for a user.
+     *
+     * @param array|\jeremykenedy\LaravelRoles\Model\Role[]|\Illuminate\Database\Eloquent\Collection $roles
+     *
+     * @return array
+     */
+    public function syncRoles($roles)
+    {
+        $this->roles = null;
+
+        return $this->roles()->sync($roles);
+    }
+
+    /**
+     * Get role level of a user.
+     *
+     * @return int
+     */
+    public function level()
+    {
+        return ($role = $this->getRoles()->sortByDesc('level')->first()) ? $role->level : 0;
+    }
+
+    /**
+     * Get all permissions from roles.
+     *
+     * @return Builder
+     */
+    public function rolePermissions()
+    {
+        $permissionModel = app(config('roles.models.permission'));
+
+        if (!$permissionModel instanceof Model) {
+            throw new \InvalidArgumentException('[roles.models.permission] must be an instance of \Illuminate\Database\Eloquent\Model');
+        }
+
+        return $permissionModel
+            ::select(['permissions.*', 'permission_role.created_at as pivot_created_at', 'permission_role.updated_at as pivot_updated_at'])
+            ->join('permission_role', 'permission_role.permission_id', '=', 'permissions.id')
+            ->join('roles', 'roles.id', '=', 'permission_role.role_id')
+            ->whereIn('roles.id', $this->getRoles()->pluck('id')->toArray())
+            ->orWhere('roles.level', '<', $this->level())
+            ->groupBy(['permissions.id', 'permissions.name', 'permissions.slug', 'permissions.description', 'permissions.model', 'permissions.created_at', 'permissions.updated_at', 'permissions.deleted_at', 'pivot_created_at', 'pivot_updated_at']);
+    }
+
+
+
+
+
+
 
     /**
      * Check if the user is allowed to manipulate with entity.
@@ -419,26 +424,16 @@ trait HasRoleAndPermission
         return (bool) config('roles.pretend.options.'.$option);
     }
 
-    /**
-     * Get an array from argument.
-     *
-     * @param int|string|array $argument
-     *
-     * @return array
-     */
-    private function getArrayFrom($argument)
-    {
-        return (!is_array($argument)) ? preg_split('/ ?[,|] ?/', $argument) : $argument;
-    }
+
 
     public function callMagic($method, $parameters)
     {
         if (starts_with($method, 'is')) {
-            return $this->hasRole(snake_case(substr($method, 2), config('roles.separator')));
+            return $this->hasRole(Str::snake(substr($method, 2), config('roles.separator')));
         } elseif (starts_with($method, 'can')) {
-            return $this->hasPermission(snake_case(substr($method, 3), config('roles.separator')));
+            return $this->hasPermission(Str::snake(substr($method, 3), config('roles.separator')));
         } elseif (starts_with($method, 'allowed')) {
-            return $this->allowed(snake_case(substr($method, 7), config('roles.separator')), $parameters[0], (isset($parameters[1])) ? $parameters[1] : true, (isset($parameters[2])) ? $parameters[2] : 'user_id');
+            return $this->allowed(Str::snake(substr($method, 7), config('roles.separator')), $parameters[0], (isset($parameters[1])) ? $parameters[1] : true, (isset($parameters[2])) ? $parameters[2] : 'user_id');
         }
 
         return parent::__call($method, $parameters);

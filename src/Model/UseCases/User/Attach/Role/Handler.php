@@ -7,6 +7,7 @@ namespace jeremykenedy\LaravelRoles\Model\UseCases\User\Attach\Role;
 use Illuminate\Support\Facades\DB;
 use jeremykenedy\LaravelRoles\Contracts\UserQueriesInterface;
 use jeremykenedy\LaravelRoles\Contracts\UserRepositoryInterface;
+use Webmozart\Assert\Assert;
 
 
 /**
@@ -57,6 +58,8 @@ class Handler
     public function handle(Command $command): void
     {
         $user = $this->queries->getById($command->userId);
+
+        Assert::notNull($user, 'User is not found!');
 
         $user->attachRole($command->roleId);
 

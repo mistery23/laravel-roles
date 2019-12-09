@@ -7,12 +7,22 @@ use jeremykenedy\LaravelRoles\App\Http\Requests;
 use jeremykenedy\LaravelRoles\Model\ReadModels\RoleQueriesInterface;
 use jeremykenedy\LaravelRoles\Model\UseCases\Role;
 
+/**
+ * Class RolesController
+ */
 class RolesController extends Controller
 {
 
+    /**
+     * @var RoleQueriesInterface
+     */
     private $queries;
 
 
+    /**
+     * RolesController constructor.
+     * @param RoleQueriesInterface $queries
+     */
     public function __construct(RoleQueriesInterface $queries)
     {
         $this->queries = $queries;
@@ -131,6 +141,13 @@ class RolesController extends Controller
         ], 200);
     }
 
+    /**
+     * @param string                        $roleId
+     * @param Requests\Role\CopyRoleRequest $request
+     * @param Role\Copy\Handler             $handler
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function copy(
         string $roleId,
         Requests\Role\CopyRoleRequest $request,
@@ -144,7 +161,7 @@ class RolesController extends Controller
 
         try {
             $handler->handle($command);
-        } catch (\RuntimeException $e) {
+        } catch (\Exception $e) {
             return response()
                 ->json(['error' => $e->getMessage()], 400);
         }

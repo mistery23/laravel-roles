@@ -40,7 +40,7 @@ class PermissionUser extends Model
     /**
      * Indicates if the model should be timestamped.
      *
-     * @var bool
+     * @var boolean
      */
     public $timestamps = true;
 
