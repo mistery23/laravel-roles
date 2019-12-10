@@ -5,9 +5,12 @@ namespace jeremykenedy\LaravelRoles\Traits;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use jeremykenedy\LaravelRoles\Model\Entity\PermissionUser;
 use jeremykenedy\LaravelRoles\Model\Entity\RoleUser;
+use jeremykenedy\LaravelRoles\Model\ReadModels\PermissionQueriesInterface;
 use jeremykenedy\LaravelRoles\Model\Utils\SplitterInterface;
 use Mistery23\EloquentSmartPushRelations\SmartPushRelations;
 use Webmozart\Assert\Assert;
@@ -78,19 +81,55 @@ trait HasRoleAndPermission
     }
 
     /**
+     * Attach permissions to a user.
+     *
+     * @param Collection $permissions
+     *
+     * @return void
+     */
+    public function attachPermissions(Collection $permissions)
+    {
+        foreach ($permissions as $permission) {
+            try {
+                $this->attachPermission($permission->id);
+            } catch (\InvalidArgumentException $e) {
+                //@todo add log
+            }
+        }
+    }
+
+    /**
      * Attach permission to a user.
      *
      * @param string $permissionId
      *
      * @return void
      */
-    public function attachPermission($permissionId)
+    public function attachPermission(string $permissionId)
     {
         $flag = $this->permissions->contains($permissionId);
 
         Assert::false($flag, 'Permission is already attached');
 
         $this->permissions->add(PermissionUser::new($this->id, $permissionId));
+    }
+
+    /**
+     * Detach permission from a user.
+     *
+     * @param Collection $permissions
+     *
+     * @return void
+     */
+    public function detachPermissions(Collection $permissions): void
+    {
+        foreach ($permissions as $permission) {
+            try {
+                $this->detachPermission($permission->id);
+            } catch (\InvalidArgumentException $e) {
+                //@todo add log
+            }
+        }
     }
 
     /**
@@ -238,9 +277,23 @@ trait HasRoleAndPermission
      */
     public function checkPermission($permission)
     {
-        return $this->permissions->contains(function ($value) use ($permission) {
-            return $permission == $value->id || Str::is($permission, $value->slug);
-        });
+        $queries = app(PermissionQueriesInterface::class);
+
+        $isPresent = $queries->hasUserPermission(
+            (string) Auth::user()->getAuthIdentifier(),
+            $permission
+        );
+
+        if (true === $isPresent) {
+            return true;
+        }
+
+        $isPresent = $queries->hasRolePermission(
+            (string) Auth::user()->getAuthIdentifier(),
+            $permission
+        );
+
+        return $isPresent;
     }
 
 

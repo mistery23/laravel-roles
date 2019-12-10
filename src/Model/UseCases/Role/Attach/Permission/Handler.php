@@ -6,7 +6,9 @@ namespace jeremykenedy\LaravelRoles\Model\UseCases\Role\Attach\Permission;
 
 use Illuminate\Support\Facades\DB;
 use jeremykenedy\LaravelRoles\Model\Entity\Role;
+use jeremykenedy\LaravelRoles\Model\ReadModels\PermissionQueriesInterface;
 use jeremykenedy\LaravelRoles\Model\ReadModels\RoleQueriesInterface;
+use Webmozart\Assert\Assert;
 
 /**
  * Class Handler
@@ -29,20 +31,28 @@ class Handler
      */
     private $queries;
 
+    /**
+     * @var PermissionQueriesInterface
+     */
+    private $permQueries;
+
 
     /**
      * Create a new command instance.
      *
      * @param Role\Repository\RoleRepositoryInterface $repository
      * @param RoleQueriesInterface                    $queries
+     * @param PermissionQueriesInterface              $permQueries
      */
     public function __construct(
         Role\Repository\RoleRepositoryInterface $repository,
-        RoleQueriesInterface $queries
+        RoleQueriesInterface $queries,
+        PermissionQueriesInterface $permQueries
     ) {
-        $this->db         = DB::connection(config('roles.connection'));
-        $this->repository = $repository;
-        $this->queries    = $queries;
+        $this->db          = DB::connection(config('roles.connection'));
+        $this->repository  = $repository;
+        $this->queries     = $queries;
+        $this->permQueries = $permQueries;
     }
 
 
@@ -57,7 +67,11 @@ class Handler
     {
         $role = $this->queries->getById($command->roleId);
 
-        $role->attachPermission($command->permissionId);
+        Assert::notNull($role, 'Role not found.');
+
+        $permissions = $this->permQueries->getByIdWithChildren($command->permissionId);
+
+        $role->attachPermissions($permissions);
 
         try {
             $this->db->beginTransaction();

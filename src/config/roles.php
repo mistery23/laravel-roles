@@ -14,6 +14,7 @@ return [
     */
 
     'connection'            => env('ROLES_DATABASE_CONNECTION', null),
+    'usersTable'            => env('ROLES_USERS_DATABASE_TABLE', 'users'),
     'rolesTable'            => env('ROLES_ROLES_DATABASE_TABLE', 'roles'),
     'roleUserTable'         => env('ROLES_ROLE_USER_DATABASE_TABLE', 'roles_users'),
     'permissionsTable'      => env('ROLES_PERMISSIONS_DATABASE_TABLE', 'permissions'),

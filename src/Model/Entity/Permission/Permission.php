@@ -8,7 +8,7 @@ use Illuminate\Support\Carbon;
 use jeremykenedy\LaravelRoles\Contracts\PermissionHasRelations as PermissionHasRelationsContract;
 use jeremykenedy\LaravelRoles\Traits\DatabaseTraits;
 use jeremykenedy\LaravelRoles\Traits\PermissionHasRelations;
-use Ramsey\Uuid\Uuid;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 use Webmozart\Assert\Assert;
 
 /**
@@ -27,6 +27,7 @@ use Webmozart\Assert\Assert;
 class Permission extends Model implements PermissionHasRelationsContract
 {
     use DatabaseTraits, PermissionHasRelations, SoftDeletes;
+    use HasRecursiveRelationships;
 
     /**
      * The attributes that should be mutated to dates.
@@ -90,6 +91,14 @@ class Permission extends Model implements PermissionHasRelationsContract
         parent::__construct($attributes);
 
         $this->table = config('roles.permissionsTable');
+    }
+
+    /**
+     * @return string
+     */
+    public function getParentKeyName()
+    {
+        return 'parent_id';
     }
 
     /**
