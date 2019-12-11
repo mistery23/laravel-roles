@@ -161,9 +161,7 @@ class PermissionsController extends Controller
         string $permissionId,
         Requests\Permission\DoChildPermissionRequest $request,
         Permission\DoChild\Handler $handler
-
-    )
-    {
+    ) {
         $command = new Permission\DoChild\Command(
             $permissionId,
             $request->get('parent_id')

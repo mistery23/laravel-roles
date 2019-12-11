@@ -11,9 +11,12 @@ trait PermissionHasRelations
      *
      * @return BelongsToMany
      */
-    public function roles()
+    public function roles(): BelongsToMany
     {
-        return $this->belongsToMany(config('roles.models.role'))->withTimestamps();
+        return $this->belongsToMany(
+            config('roles.models.role')
+        )
+            ->withTimestamps();
     }
 
     /**
@@ -21,8 +24,11 @@ trait PermissionHasRelations
      *
      * @return BelongsToMany
      */
-    public function users()
+    public function users(): BelongsToMany
     {
-        return $this->belongsToMany(config('roles.models.defaultUser'))->withTimestamps();
+        return $this->belongsToMany(
+            config('roles.models.defaultUser')
+        )
+            ->withTimestamps();
     }
 }

@@ -15,7 +15,9 @@ interface RoleQueriesInterface
 
     public function hasByNameAndSlug(string $name, string $slug): bool;
 
+    public function exists(string $id): bool;
+
     public function getAll(int $perPage = 20): LengthAwarePaginator;
 
-    public function getAllWithPermissions(int $perPage = 20): LengthAwarePaginator;
+    public function getAllPermissions(string $roleId, int $perPage = 20): LengthAwarePaginator;
 }

@@ -10,16 +10,17 @@ class RoleQueries implements RoleQueriesInterface
 
     public function getById(string $id): Role
     {
-        $role = Role::findOrFail($id);
-
-        return $role;
+        return Role::findOrFail($id);
     }
 
     public function getBySlug(string $slug): Role
     {
-        $role = Role::where('slug', $slug)->first();
+        return Role::where('slug', $slug)->first();
+    }
 
-        return $role;
+    public function exists(string $id): bool
+    {
+        return Role::where('id', $id)->exists();
     }
 
     public function hasByNameAndSlug(string $name, string $slug): bool
@@ -33,15 +34,15 @@ class RoleQueries implements RoleQueriesInterface
 
     public function getAll(int $perPage = 20): LengthAwarePaginator
     {
-        $roles = Role::withoutTrashed()->orderByDesc('created_at')->paginate($perPage);
-
-        return $roles;
+        return Role::withoutTrashed()->orderBy('level')->paginate($perPage);
     }
 
-    public function getAllWithPermissions(int $perPage = 20): LengthAwarePaginator
+    public function getAllPermissions(string $roleId, int $perPage = 20): LengthAwarePaginator
     {
-        $roles = Role::withoutTrashed()->with('permissions')->orderByDesc('created_at')->paginate($perPage);
-
-        return $roles;
+        return Role::withoutTrashed()
+            ->with('permissions.descendants')
+            ->where(config('roles.rolesTable') . '.id', $roleId)
+            ->orderBy('level')
+            ->paginate($perPage);
     }
 }

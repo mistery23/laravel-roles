@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace jeremykenedy\LaravelRoles\Model\UseCases\Permission\DoChild;
+namespace jeremykenedy\LaravelRoles\Model\UseCases\Role\DoRoot;
 
 use Illuminate\Support\Facades\DB;
-use jeremykenedy\LaravelRoles\Model\Entity\Permission;
-use jeremykenedy\LaravelRoles\Model\ReadModels\PermissionQueriesInterface;
+use jeremykenedy\LaravelRoles\Model\Entity\Role;
+use jeremykenedy\LaravelRoles\Model\ReadModels\RoleQueriesInterface;
 use Webmozart\Assert\Assert;
 
 /**
@@ -21,12 +21,12 @@ class Handler
     private $db;
 
     /**
-     * @var Permission\Repository\PermissionRepositoryInterface
+     * @var Role\Repository\RoleRepositoryInterface
      */
     private $repository;
 
     /**
-     * @var PermissionQueriesInterface
+     * @var RoleQueriesInterface
      */
     private $queries;
 
@@ -34,12 +34,12 @@ class Handler
     /**
      * Create a new command instance.
      *
-     * @param Permission\Repository\PermissionRepositoryInterface $repository
-     * @param PermissionQueriesInterface $queries
+     * @param Role\Repository\RoleRepositoryInterface $repository
+     * @param RoleQueriesInterface $queries
      */
     public function __construct(
-        Permission\Repository\PermissionRepositoryInterface $repository,
-        PermissionQueriesInterface $queries
+        Role\Repository\RoleRepositoryInterface $repository,
+        RoleQueriesInterface $queries
     ) {
         $this->db         = DB::connection(config('roles.connection'));
         $this->repository = $repository;
@@ -56,20 +56,16 @@ class Handler
      */
     public function handle(Command $command): void
     {
-        $perm = $this->queries->getById($command->id);
+        $role = $this->queries->getById($command->id);
 
-        Assert::notEq($perm->parent_id, $command->parentId, 'Permission is already childlike by this parent.');
+        Assert::notNull($role->parent_id, 'Role is already root.');
 
-        $parent = $this->queries->exists($command->parentId);
-
-        Assert::true($parent, 'Parent permission isn\'t exists.');
-
-        $perm->doChild($command->parentId);
+        $role->doRoot();
 
         try {
             $this->db->beginTransaction();
 
-            $this->repository->update($perm);
+            $this->repository->update($role);
 
             $this->db->commit();
         } catch (\PDOException $e) {

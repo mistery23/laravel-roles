@@ -8,28 +8,29 @@
 */
 
 Route::group([
-    'middleware'    => ['web'],
     'as'            => 'laravelroles::',
     'namespace'     => '\jeremykenedy\LaravelRoles\App\Http\Controllers\Api',
 ], function () {
 
     // Roles
     Route::get('/roles', 'RolesController@index');
+    Route::get('/roles/{roleId}/permissions', 'RolesController@withPermissions');
     Route::post('/roles', 'RolesController@store');
-    Route::get('/roles/permissions', 'RolesController@withPermissions');
     Route::put('/roles/{roleId}', 'RolesController@edit');
     Route::delete('/roles/{roleId}', 'RolesController@destroy');
     Route::post('/roles/{roleId}/permissions', 'RolesController@attachPermission');
     Route::delete('/roles/{roleId}/permissions', 'RolesController@detachPermission');
     Route::post('/roles/{roleId}/copy', 'RolesController@copy');
+    Route::patch('/roles/{roleId}/do-child', 'RolesController@doChild');
+    Route::patch('/roles/{roleId}/do-root', 'RolesController@doRoot');
 
     // Permissions
     Route::get('/permissions', 'PermissionsController@index');
     Route::post('/permissions', 'PermissionsController@store');
     Route::put('/permissions/{permissionId}', 'PermissionsController@edit');
     Route::delete('/permissions/{permissionId}', 'PermissionsController@destroy');
-    Route::put('/permissions/{permissionId}/do-child', 'PermissionsController@doChild');
-    Route::put('/permissions/{permissionId}/do-root', 'PermissionsController@doRoot');
+    Route::patch('/permissions/{permissionId}/do-child', 'PermissionsController@doChild');
+    Route::patch('/permissions/{permissionId}/do-root', 'PermissionsController@doRoot');
 
     //Users
     Route::post('/users/{userId}/roles', 'UsersController@attachRole');

@@ -1,6 +1,6 @@
 <?php
 
-namespace jeremykenedy\LaravelRoles\Model\UseCases\Permission\DoChild;
+namespace jeremykenedy\LaravelRoles\Model\UseCases\Role\DoChild;
 
 /**
  * Class Command

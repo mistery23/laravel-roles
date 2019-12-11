@@ -25,7 +25,7 @@ trait HasRoleAndPermission
      *
      * @return BelongsToMany
      */
-    public function roles()
+    public function roles(): BelongsToMany
     {
         return $this->belongsToMany(
             config('roles.models.role'),
@@ -39,7 +39,7 @@ trait HasRoleAndPermission
      *
      * @return BelongsToMany
      */
-    public function permissions()
+    public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(
             config('roles.models.permission'),
@@ -87,7 +87,7 @@ trait HasRoleAndPermission
      *
      * @return void
      */
-    public function attachPermissions(Collection $permissions)
+    public function attachPermissions(Collection $permissions): void
     {
         foreach ($permissions as $permission) {
             try {
@@ -105,7 +105,7 @@ trait HasRoleAndPermission
      *
      * @return void
      */
-    public function attachPermission(string $permissionId)
+    public function attachPermission(string $permissionId): void
     {
         $flag = $this->permissions->contains($permissionId);
 
@@ -156,7 +156,7 @@ trait HasRoleAndPermission
      *
      * @return boolean
      */
-    public function hasRole($role, $all = false)
+    public function hasRole($role, $all = false): bool
     {
         if (!$all) {
             return $this->hasOneRole($role);
@@ -172,7 +172,7 @@ trait HasRoleAndPermission
      *
      * @return bool
      */
-    public function hasOneRole($role)
+    public function hasOneRole($role): bool
     {
         foreach ($this->getArrayFrom($role) as $role) {
             if ($this->checkRole($role)) {
@@ -190,7 +190,7 @@ trait HasRoleAndPermission
      *
      * @return bool
      */
-    public function hasAllRoles($role)
+    public function hasAllRoles($role): bool
     {
         foreach ($this->getArrayFrom($role) as $role) {
             if (!$this->checkRole($role)) {
@@ -208,10 +208,10 @@ trait HasRoleAndPermission
      *
      * @return boolean
      */
-    public function checkRole($role)
+    public function checkRole($role): bool
     {
-        return $this->roles->contains(function ($value) use ($role) {
-            return $role == $value->id || Str::is($role, $value->slug);
+        return $this->roles->contains(static function ($value) use ($role) {
+            return $role === $value->id || Str::is($role, $value->slug);
         });
     }
 
@@ -253,13 +253,13 @@ trait HasRoleAndPermission
     /**
      * Check if the user has all permissions.
      *
-     * @param int|string|array $permission
+     * @param int|string|array $permissions
      *
      * @return bool
      */
-    public function hasAllPermissions($permission)
+    public function hasAllPermissions($permissions): bool
     {
-        foreach ($this->getArrayFrom($permission) as $permission) {
+        foreach ($this->getArrayFrom($permissions) as $permission) {
             if (!$this->checkPermission($permission)) {
                 return false;
             }

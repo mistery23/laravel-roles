@@ -20,12 +20,17 @@ class CreateRolesTable extends Migration
         if (!$tableCheck) {
             Schema::connection($connection)->create($table, function (Blueprint $table) {
                 $table->uuid('id')->primary();
-                $table->string('name', 64)->unique();
-                $table->string('slug', 64)->unique();
+                $table->string('name', 64);
+                $table->string('slug')->unique()->index();
                 $table->string('description', 128)->nullable();
                 $table->smallInteger('level')->default(1);
+                $table->uuid('parent_id')->index()->nullable();
                 $table->timestamps();
                 $table->softDeletes();
+            });
+
+            Schema::connection($connection)->table($table, function (Blueprint $table) {
+                $table->foreign('parent_id')->references('id')->on($table)->onDelete('cascade');
             });
         }
     }
@@ -39,6 +44,7 @@ class CreateRolesTable extends Migration
     {
         $connection = config('roles.connection');
         $table = config('roles.rolesTable');
+
         Schema::connection($connection)->dropIfExists($table);
     }
 }

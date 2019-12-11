@@ -20,8 +20,8 @@ class CreatePermissionsTable extends Migration
         if (!$tableCheck) {
             Schema::connection($connection)->create($table, function (Blueprint $table) {
                 $table->uuid('id')->primary();
-                $table->string('name', 64);
-                $table->string('slug', 64)->unique();
+                $table->string('name', 32);
+                $table->string('slug', 32)->unique()->index();
                 $table->string('description', 128)->nullable();
                 $table->string('model', 64)->nullable();
                 $table->uuid('parent_id')->index()->nullable();
@@ -44,6 +44,7 @@ class CreatePermissionsTable extends Migration
     {
         $connection = config('roles.connection');
         $table = config('roles.permissionsTable');
+
         Schema::connection($connection)->dropIfExists($table);
     }
 }

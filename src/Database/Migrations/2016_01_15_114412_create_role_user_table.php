@@ -40,6 +40,7 @@ class CreateRoleUserTable extends Migration
     {
         $connection = config('roles.connection');
         $table = config('roles.roleUserTable');
+
         Schema::connection($connection)->dropIfExists($table);
     }
 }

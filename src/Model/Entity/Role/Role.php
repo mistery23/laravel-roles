@@ -8,6 +8,7 @@ use jeremykenedy\LaravelRoles\Contracts\RoleHasRelations as RoleHasRelationsCont
 use jeremykenedy\LaravelRoles\Traits\DatabaseTraits;
 use jeremykenedy\LaravelRoles\Traits\RoleHasRelations;
 use Mistery23\EloquentSmartPushRelations\SmartPushRelations;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 use Webmozart\Assert\Assert;
 
 /**
@@ -18,6 +19,7 @@ use Webmozart\Assert\Assert;
  * @property string  $slug
  * @property string  $description
  * @property integer $level
+ * @property integer $parent_id
  * @property string  $created_at
  * @property string  $updated_at
  * @property string  $deleted_at
@@ -25,6 +27,7 @@ use Webmozart\Assert\Assert;
 class Role extends Model implements RoleHasRelationsContract
 {
     use DatabaseTraits, RoleHasRelations, SmartPushRelations, SoftDeletes;
+    use HasRecursiveRelationships;
 
     /**
      * The attributes that should be mutated to dates.
@@ -48,6 +51,7 @@ class Role extends Model implements RoleHasRelationsContract
         'slug',
         'description',
         'level',
+        'parent_id'
     ];
 
     /**
@@ -61,6 +65,7 @@ class Role extends Model implements RoleHasRelationsContract
         'slug'          => 'string',
         'description'   => 'string',
         'level'         => 'integer',
+        'parent_id'     => 'string',
         'created_at'    => 'datetime',
         'updated_at'    => 'datetime',
         'deleted_at'    => 'datetime',
@@ -167,5 +172,23 @@ class Role extends Model implements RoleHasRelationsContract
         });
 
         return $role;
+    }
+
+    /**
+     * @param string $parentId
+     *
+     * @return void
+     */
+    public function doChild(string $parentId): void
+    {
+        $this->parent_id = $parentId;
+    }
+
+    /**
+     * @return void
+     */
+    public function doRoot(): void
+    {
+        $this->parent_id = null;
     }
 }

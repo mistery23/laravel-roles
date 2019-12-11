@@ -47,12 +47,13 @@ class RolesController extends Controller
 
     /**
      * Return all the roles, Permissions, and Users data.
+     * @param string $roleId
      *
      * @return \Illuminate\Http\Response
      */
-    public function withPermissions()
+    public function withPermissions(string $roleId)
     {
-        $roles = $this->queries->getAllWithPermissions();
+        $roles = $this->queries->getAllPermissions($roleId);
 
         return response()->json([
             'code'      => 200,
@@ -268,6 +269,53 @@ class RolesController extends Controller
             'code'      => 200,
             'status'    => 'OK',
             'message'   => 'Permission detached.',
+        ], 200);
+    }
+
+    public function doChild(
+        string $permissionId,
+        Requests\Role\DoChildRoleRequest $request,
+        Role\DoChild\Handler $handler
+    ) {
+        $command = new Role\DoChild\Command(
+            $permissionId,
+            $request->get('parent_id')
+        );
+
+        try {
+            $handler->handle($command);
+        } catch (\Exception $e) {
+            return response()
+                ->json(['error' => $e->getMessage()], 400);
+        }
+
+        return response()->json([
+            'code'      => 200,
+            'status'    => 'OK',
+            'message'   => 'Permission was set childlike.',
+        ], 200);
+    }
+
+    public function doRoot(
+        string $permissionId,
+        Role\DoRoot\Handler $handler
+
+    ) {
+        $command = new Role\DoRoot\Command(
+            $permissionId,
+        );
+
+        try {
+            $handler->handle($command);
+        } catch (\Exception $e) {
+            return response()
+                ->json(['error' => $e->getMessage()], 400);
+        }
+
+        return response()->json([
+            'code'      => 200,
+            'status'    => 'OK',
+            'message'   => 'Permission was set root.',
         ], 200);
     }
 }

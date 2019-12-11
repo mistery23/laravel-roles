@@ -41,6 +41,7 @@ class CreatePermissionRoleTable extends Migration
     {
         $connection = config('roles.connection');
         $table = config('roles.permissionsRoleTable');
+
         Schema::connection($connection)->dropIfExists($table);
     }
 }

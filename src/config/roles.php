@@ -14,12 +14,12 @@ return [
     */
 
     'connection'            => env('ROLES_DATABASE_CONNECTION', null),
-    'usersTable'            => env('ROLES_USERS_DATABASE_TABLE', 'users'),
-    'rolesTable'            => env('ROLES_ROLES_DATABASE_TABLE', 'roles'),
-    'roleUserTable'         => env('ROLES_ROLE_USER_DATABASE_TABLE', 'roles_users'),
-    'permissionsTable'      => env('ROLES_PERMISSIONS_DATABASE_TABLE', 'permissions'),
-    'permissionsRoleTable'  => env('ROLES_PERMISSION_ROLE_DATABASE_TABLE', 'permissions_roles'),
-    'permissionsUserTable'  => env('ROLES_PERMISSION_USER_DATABASE_TABLE', 'permissions_users'),
+    'usersTable'            => env('ROLES_USERS_DATABASE_TABLE', 'user_users'),
+    'rolesTable'            => env('ROLES_ROLES_DATABASE_TABLE', 'user_roles'),
+    'roleUserTable'         => env('ROLES_ROLE_USER_DATABASE_TABLE', 'user_roles_users'),
+    'permissionsTable'      => env('ROLES_PERMISSIONS_DATABASE_TABLE', 'user_permissions'),
+    'permissionsRoleTable'  => env('ROLES_PERMISSION_ROLE_DATABASE_TABLE', 'user_permissions_roles'),
+    'permissionsUserTable'  => env('ROLES_PERMISSION_USER_DATABASE_TABLE', 'user_permissions_users'),
 
     /*
     |--------------------------------------------------------------------------
@@ -55,8 +55,8 @@ return [
     ],
 
     'dependencies' => [
-        'userRepository' => env('USER_REPOSITORY', ''),
-        'userQueries'    => env('USER_QUERIES', ''),
+        'userRepository' => env('USER_REPOSITORY', \App\Model\User\Entity\User\Repository\UserRepository::class),
+        'userQueries'    => env('USER_QUERIES', \App\Model\User\Entity\User\Repository\UserQueries::class),
     ],
 
     /*
@@ -122,7 +122,7 @@ return [
     */
 
     // Enable Optional Roles Gui
-    'rolesGuiEnabled'               => env('ROLES_GUI_ENABLED', false),
+    'rolesGuiEnabled'               => env('ROLES_GUI_ENABLED', true),
 
     // Enable `auth` middleware
     'rolesGuiAuthEnabled'           => env('ROLES_GUI_AUTH_ENABLED', true),
@@ -228,5 +228,5 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'laravelUsersEnabled'           => env('ROLES_GUI_LARAVEL_ROLES_ENABLED', false),
+    'laravelUsersEnabled'           => env('ROLES_GUI_LARAVEL_ROLES_ENABLED', true),
 ];
