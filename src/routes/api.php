@@ -9,7 +9,7 @@
 
 Route::group([
     'as'            => 'laravelroles::',
-    'namespace'     => '\jeremykenedy\LaravelRoles\App\Http\Controllers\Api',
+    'namespace'     => '\Mistery23\LaravelRoles\App\Http\Controllers\Api',
 ], function () {
 
     // Roles

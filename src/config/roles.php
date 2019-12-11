@@ -13,13 +13,13 @@ return [
     |
     */
 
-    'connection'            => env('ROLES_DATABASE_CONNECTION', null),
-    'usersTable'            => env('ROLES_USERS_DATABASE_TABLE', 'user_users'),
-    'rolesTable'            => env('ROLES_ROLES_DATABASE_TABLE', 'user_roles'),
-    'roleUserTable'         => env('ROLES_ROLE_USER_DATABASE_TABLE', 'user_roles_users'),
-    'permissionsTable'      => env('ROLES_PERMISSIONS_DATABASE_TABLE', 'user_permissions'),
-    'permissionsRoleTable'  => env('ROLES_PERMISSION_ROLE_DATABASE_TABLE', 'user_permissions_roles'),
-    'permissionsUserTable'  => env('ROLES_PERMISSION_USER_DATABASE_TABLE', 'user_permissions_users'),
+    'connection'           => env('ROLES_DATABASE_CONNECTION', null),
+    'usersTable'           => env('ROLES_USERS_DATABASE_TABLE', 'user_users'),
+    'rolesTable'           => env('ROLES_ROLES_DATABASE_TABLE', 'user_roles'),
+    'roleUserTable'        => env('ROLES_ROLE_USER_DATABASE_TABLE', 'user_roles_users'),
+    'permissionsTable'     => env('ROLES_PERMISSIONS_DATABASE_TABLE', 'user_permissions'),
+    'permissionsRoleTable' => env('ROLES_PERMISSION_ROLE_DATABASE_TABLE', 'user_permissions_roles'),
+    'permissionsUserTable' => env('ROLES_PERMISSION_USER_DATABASE_TABLE', 'user_permissions_users'),
 
     /*
     |--------------------------------------------------------------------------
@@ -40,17 +40,17 @@ return [
     |--------------------------------------------------------------------------
     |
     | If you want, you can replace default models from this package by models
-    | you created. Have a look at `jeremykenedy\LaravelRoles\Models\Role` model and
-    | `jeremykenedy\LaravelRoles\Models\Permission` model.
+    | you created. Have a look at `Mistery23\LaravelRoles\Models\Role` model and
+    | `Mistery23\LaravelRoles\Models\Permission` model.
     |
     */
 
     'models' => [
-        'role'           => env('ROLES_DEFAULT_ROLE_MODEL', jeremykenedy\LaravelRoles\Model\Entity\Role\Role::class),
-        'permission'     => env('ROLES_DEFAULT_PERMISSION_MODEL', jeremykenedy\LaravelRoles\Model\Entity\Permission\Permission::class),
-        'permissionRole' => env('ROLES_DEFAULT_PERMISSION_MODEL', jeremykenedy\LaravelRoles\Model\Entity\RolePermission::class),
-        'userRole'       => env('ROLES_DEFAULT_PERMISSION_MODEL', jeremykenedy\LaravelRoles\Model\Entity\RoleUser::class),
-        'userPermission' => env('ROLES_DEFAULT_PERMISSION_MODEL', jeremykenedy\LaravelRoles\Model\Entity\PermissionUser::class),
+        'role'           => env('ROLES_DEFAULT_ROLE_MODEL', Mistery23\LaravelRoles\Model\Entity\Role\Role::class),
+        'permission'     => env('ROLES_DEFAULT_PERMISSION_MODEL', Mistery23\LaravelRoles\Model\Entity\Permission\Permission::class),
+        'permissionRole' => env('ROLES_DEFAULT_PERMISSION_MODEL', Mistery23\LaravelRoles\Model\Entity\RolePermission::class),
+        'userRole'       => env('ROLES_DEFAULT_PERMISSION_MODEL', Mistery23\LaravelRoles\Model\Entity\RoleUser::class),
+        'userPermission' => env('ROLES_DEFAULT_PERMISSION_MODEL', Mistery23\LaravelRoles\Model\Entity\PermissionUser::class),
         'defaultUser'    => env('ROLES_DEFAULT_USER_MODEL', config('auth.providers.users.model')),
     ],
 
@@ -59,39 +59,6 @@ return [
         'userQueries'    => env('USER_QUERIES', \App\Model\User\Entity\User\Repository\UserQueries::class),
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Roles, Permissions and Allowed "Pretend"
-    |--------------------------------------------------------------------------
-    |
-    | You can pretend or simulate package behavior no matter what is in your
-    | database. It is really useful when you are testing you application.
-    | Set up what will methods hasRole(), hasPermission() and allowed() return.
-    |
-    */
-
-    'pretend' => [
-        'enabled' => false,
-        'options' => [
-            'hasRole'       => true,
-            'hasPermission' => true,
-            'allowed'       => true,
-        ],
-    ],
-    /*
-    |--------------------------------------------------------------------------
-    | Default Migrations
-    |--------------------------------------------------------------------------
-    |
-    | These are the default package migrations. If you publish the migrations
-    | to your project, then this is not necessary and should be disabled. This
-    | will enable our default migrations.
-    |
-    */
-
-    'defaultMigrations' => [
-        'enabled'        => env('ROLES_MIGRATION_DEFAULT_ENABLED', false),
-    ],
     /*
     |--------------------------------------------------------------------------
     | Default Seeds
@@ -109,77 +76,6 @@ return [
         'ConnectRelationshipsSeeder'    => env('ROLES_SEED_DEFAULT_RELATIONSHIPS', true),
         'UsersTableSeeder'              => env('ROLES_SEED_DEFAULT_USERS', false),
     ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Laravel Roles GUI Settings
-    |--------------------------------------------------------------------------
-    |
-    | This is the GUI for Laravel Roles to be able to CRUD them
-    | easily and fast. This is optional and is not needed
-    | for your application.
-    |
-    */
-
-    // Enable Optional Roles Gui
-    'rolesGuiEnabled'               => env('ROLES_GUI_ENABLED', true),
-
-    // Enable `auth` middleware
-    'rolesGuiAuthEnabled'           => env('ROLES_GUI_AUTH_ENABLED', true),
-
-    // Enable Roles GUI middleware
-    'rolesGuiMiddlewareEnabled'     => env('ROLES_GUI_MIDDLEWARE_ENABLED', true),
-
-    // Optional Roles GUI Middleware
-    'rolesGuiMiddleware'            => env('ROLES_GUI_MIDDLEWARE', 'role:admin'),
-
-    // User Permissions or Role needed to create a new role
-    'rolesGuiCreateNewRolesMiddlewareType'   => env('ROLES_GUI_CREATE_ROLE_MIDDLEWARE_TYPE', 'role'), //permissions or roles
-    'rolesGuiCreateNewRolesMiddleware'       => env('ROLES_GUI_CREATE_ROLE_MIDDLEWARE_TYPE', 'admin'), // admin, XXX. ... or perms.XXX
-
-    // User Permissions or Role needed to create a new permission
-    'rolesGuiCreateNewPermissionMiddlewareType'  => env('ROLES_GUI_CREATE_PERMISSION_MIDDLEWARE_TYPE', 'role'), //permissions or roles
-    'rolesGuiCreateNewPermissionsMiddleware'     => env('ROLES_GUI_CREATE_PERMISSION_MIDDLEWARE_TYPE', 'admin'), // admin, XXX. ... or perms.XXX
-
-    // The parent blade file
-    'bladeExtended'                 => env('ROLES_GUI_BLADE_EXTENDED', 'layouts.app'),
-
-    // Blade Extension Placement
-    'bladePlacement'                => env('ROLES_GUI_BLADE_PLACEMENT', 'yield'),
-    'bladePlacementCss'             => env('ROLES_GUI_BLADE_PLACEMENT_CSS', 'inline_template_linked_css'),
-    'bladePlacementJs'              => env('ROLES_GUI_BLADE_PLACEMENT_JS', 'inline_footer_scripts'),
-
-    // Titles placement extend
-    'titleExtended'                 => env('ROLES_GUI_TITLE_EXTENDED', 'template_title'),
-
-    // Switch Between bootstrap 3 `panel` and bootstrap 4 `card` classes
-    'bootstapVersion'               => env('ROLES_GUI_BOOTSTRAP_VERSION', '4'),
-
-    // Additional Card classes for styling -
-    // See: https://getbootstrap.com/docs/4.0/components/card/#background-and-color
-    // Example classes: 'text-white bg-primary mb-3'
-    'bootstrapCardClasses'          => env('ROLES_GUI_CARD_CLASSES', ''),
-
-    // Bootstrap Tooltips
-    'tooltipsEnabled'               => env('ROLES_GUI_TOOLTIPS_ENABLED', true),
-
-    // jQuery
-    'enablejQueryCDN'               => env('ROLES_GUI_JQUERY_CDN_ENABLED', true),
-    'JQueryCDN'                     => env('ROLES_GUI_JQUERY_CDN_URL', 'https://code.jquery.com/jquery-3.3.1.min.js'),
-
-    // Selectize JS
-    'enableSelectizeJsCDN'          => env('ROLES_GUI_SELECTIZEJS_CDN_ENABLED', true),
-    'SelectizeJsCDN'                => env('ROLES_GUI_SELECTIZEJS_CDN_URL', 'https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js'),
-    'enableSelectizeJs'             => env('ROLES_GUI_SELECTIZEJS_ENABLED', true),
-    'enableSelectizeJsCssCDN'       => env('ROLES_GUI_SELECTIZEJS_CSS_CDN_ENABLED', true),
-    'SelectizeJsCssCDN'             => env('ROLES_GUI_SELECTIZEJS_CSS_CDN_URL', 'https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.min.css'),
-
-    // Font Awesome
-    'enableFontAwesomeCDN'          => env('ROLES_GUI_FONT_AWESOME_CDN_ENABLED', true),
-    'fontAwesomeCDN'                => env('ROLES_GUI_FONT_AWESOME_CDN_URL', 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'),
-
-    // Flash Messaging
-    'builtInFlashMessagesEnabled'   => env('ROLES_GUI_FLASH_MESSAGES_ENABLED', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -210,23 +106,4 @@ return [
     'rolesAPICreateNewPermissionMiddlewareType'  => env('ROLES_API_CREATE_PERMISSION_MIDDLEWARE_TYPE', 'role'), //permissions or roles
     'rolesAPICreateNewPermissionsMiddleware'     => env('ROLES_API_CREATE_PERMISSION_MIDDLEWARE_TYPE', 'admin'), // admin, XXX. ... or perms.XXX
 
-    /*
-    |--------------------------------------------------------------------------
-    | Laravel Roles GUI Datatables Settings
-    |--------------------------------------------------------------------------
-    */
-
-    'enabledDatatablesJs'           => env('ROLES_GUI_DATATABLES_JS_ENABLED', false),
-    'datatablesJsStartCount'        => env('ROLES_GUI_DATATABLES_JS_START_COUNT', 25),
-    'datatablesCssCDN'              => env('ROLES_GUI_DATATABLES_CSS_CDN', 'https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css'),
-    'datatablesJsCDN'               => env('ROLES_GUI_DATATABLES_JS_CDN', 'https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'),
-    'datatablesJsPresetCDN'         => env('ROLES_GUI_DATATABLES_JS_PRESET_CDN', 'https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js'),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Laravel Roles Package Integration Settings
-    |--------------------------------------------------------------------------
-    */
-
-    'laravelUsersEnabled'           => env('ROLES_GUI_LARAVEL_ROLES_ENABLED', true),
 ];

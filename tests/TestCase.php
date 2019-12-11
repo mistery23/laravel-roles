@@ -1,35 +1,15 @@
 <?php
 
-namespace jeremykenedy\LaravelRoles\Test;
+namespace Mistery23\LaravelRoles\Test;
 
-use jeremykenedy\LaravelRoles\RolesServiceProvider;
-use Orchestra\Testbench\TestCase as OrchestraTestCase;
+use Mistery23\LaravelRoles\RolesServiceProvider;
+use Orchestra\Testbench\TestCase as BaseTestCase;
 
-class TestCase extends OrchestraTestCase
+abstract class TestCase extends BaseTestCase
 {
-    /**
-     * Load package service provider.
-     *
-     * @param \Illuminate\Foundation\Application $app
-     *
-     * @return jeremykenedy\LaravelRoles\RolesServiceProvider
-     */
+
     protected function getPackageProviders($app)
     {
         return [RolesServiceProvider::class];
-    }
-
-    /**
-     * Load package alias.
-     *
-     * @param \Illuminate\Foundation\Application $app
-     *
-     * @return array
-     */
-    protected function getPackageAliases($app)
-    {
-        return [
-            'laravelroles',
-        ];
     }
 }
