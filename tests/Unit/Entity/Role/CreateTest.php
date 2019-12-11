@@ -1,11 +1,10 @@
 <?php
 
-namespace Mistery23\LaravelRoles\Test\Unit\Role\Entity;
+namespace Mistery23\LaravelRoles\Test\Unit\Entity\Role;
 
 use Mistery23\LaravelRoles\Model\Entity\Role\Role;
 use Mistery23\LaravelRoles\Test\TestCase;
 use Mistery23\LaravelRoles\Test\Unit\Builder\Role\RoleBuilder;
-use Ramsey\Uuid\Uuid;
 
 class CreateTest extends TestCase
 {
@@ -41,6 +40,6 @@ class CreateTest extends TestCase
         self::assertEquals($name, $role->name);
         self::assertEquals($slug, $role->slug);
         self::assertEquals(Role::$defaultLevel, $role->level);
-        self::isNull($role->description);
+        self::assertNull($role->description);
     }
 }

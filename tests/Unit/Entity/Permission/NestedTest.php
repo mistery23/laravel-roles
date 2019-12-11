@@ -1,9 +1,9 @@
 <?php
 
-namespace Mistery23\LaravelRoles\Test\Unit\Entity\Role;
+namespace Mistery23\LaravelRoles\Test\Unit\Entity\Permission;
 
 use Mistery23\LaravelRoles\Test\TestCase;
-use Mistery23\LaravelRoles\Test\Unit\Builder\Role\RoleBuilder;
+use Mistery23\LaravelRoles\Test\Unit\Builder\Permission\PermissionBuilder;
 use Ramsey\Uuid\Uuid;
 
 class NestedTest extends TestCase
@@ -11,7 +11,7 @@ class NestedTest extends TestCase
 
     public function testDoChild(): void
     {
-        $role = (new RoleBuilder())
+        $role = (new PermissionBuilder())
             ->build();
 
         $role->doChild($id = Uuid::uuid4());
@@ -21,7 +21,7 @@ class NestedTest extends TestCase
 
     public function testDoRoot(): void
     {
-        $role = (new RoleBuilder())
+        $role = (new PermissionBuilder())
             ->child()
             ->build();
 

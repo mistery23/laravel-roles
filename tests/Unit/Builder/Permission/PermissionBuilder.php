@@ -12,6 +12,8 @@ class PermissionBuilder
     private $slug;
     private $description;
 
+    private $parent;
+
 
     /**
      * RoleBuilder constructor.
@@ -38,6 +40,15 @@ class PermissionBuilder
 
         $clone->name = $name;
         $clone->slug = $slug;
+
+        return $clone;
+    }
+
+    public function child()
+    {
+        $clone = clone $this;
+
+        $clone->parent = Uuid::uuid4();
 
         return $clone;
     }

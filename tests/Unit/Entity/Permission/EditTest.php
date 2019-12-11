@@ -1,48 +1,46 @@
 <?php
 
-namespace Mistery23\LaravelRoles\Test\Unit\Entity\Role;
+namespace Mistery23\LaravelRoles\Test\Unit\Entity\Permission;
 
 use Mistery23\LaravelRoles\Test\TestCase;
-use Mistery23\LaravelRoles\Test\Unit\Builder\Role\RoleBuilder;
+use Mistery23\LaravelRoles\Test\Unit\Builder\Permission\PermissionBuilder;
 
 class EditTest extends TestCase
 {
 
     public function testEdit(): void
     {
-        $role = (new RoleBuilder())
+        $role = (new PermissionBuilder())
             ->build();
 
         $role->edit(
-            $name = 'admin',
-            $slug = 'admin',
-            $level = 2,
-            $desc = 'Admin role'
+            $name = 'user create',
+            $slug = 'user.create',
+            null,
+            null,
+            $desc = 'User create'
         );
 
         self::assertEquals($name, $role->name);
         self::assertEquals($slug, $role->slug);
-        self::assertEquals($level, $role->level);
         self::assertEquals($desc, $role->description);
     }
 
     public function testEditMin(): void
     {
-        $role = (new RoleBuilder())
+        $role = (new PermissionBuilder())
             ->withOptionField(
-                $level = 2,
-                $desc  = 'Role admin'
+                $desc  = 'User create'
             )
             ->build();
 
         $role->edit(
-            $name = 'admin',
-            $slug = 'admin'
+            $name = 'user create',
+            $slug = 'user.create'
         );
 
         self::assertEquals($name, $role->name);
         self::assertEquals($slug, $role->slug);
-        self::assertEquals($level, $role->level);
         self::assertEquals($desc, $role->description);
     }
 }

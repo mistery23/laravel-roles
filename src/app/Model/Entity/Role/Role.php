@@ -72,13 +72,6 @@ class Role extends Model implements RoleHasRelationsContract
     ];
 
     /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
-    public $timestamps = true;
-
-    /**
      * @var string
      */
     public $keyType = 'string';
@@ -164,6 +157,13 @@ class Role extends Model implements RoleHasRelationsContract
         Assert::null($this->deleted_at, 'Role already deleted');
     }
 
+    /**
+     * @param string $id
+     * @param string $name
+     * @param string $slug
+     *
+     * @return self
+     */
     public function copy(string $id, string $name, string $slug): self
     {
         $role = self::new(

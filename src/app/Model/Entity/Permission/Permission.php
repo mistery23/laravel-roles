@@ -115,9 +115,9 @@ class Permission extends Model implements PermissionHasRelationsContract
         string $id,
         string $name,
         string $slug,
-        ?string $entity,
-        ?string $parentId,
-        ?string $description
+        ?string $entity = null,
+        ?string $parentId = null,
+        ?string $description = null
     ): self {
 
         $model = new self();
@@ -144,16 +144,25 @@ class Permission extends Model implements PermissionHasRelationsContract
     public function edit(
         string $name,
         string $slug,
-        ?string $entity,
-        ?string $parentId,
-        ?string $description
+        ?string $entity = null,
+        ?string $parentId = null,
+        ?string $description = null
     ): void {
 
-        $this->name        = $name;
-        $this->slug        = $slug;
-        $this->model       = $entity;
-        $this->parent_id   = $parentId;
-        $this->description = $description;
+        $this->name = $name;
+        $this->slug = $slug;
+
+        if ($entity) {
+            $this->model = $entity;
+        }
+
+        if ($parentId) {
+            $this->parent_id = $parentId;
+        }
+
+        if ($description) {
+            $this->description = $description;
+        }
     }
 
     /**
