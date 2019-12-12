@@ -38,13 +38,6 @@ class PermissionUser extends Model
     ];
 
     /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var boolean
-     */
-    public $timestamps = true;
-
-    /**
      * @var string
      */
     public $keyType = 'string';

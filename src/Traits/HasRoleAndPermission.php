@@ -355,28 +355,6 @@ trait HasRoleAndPermission
         return ($role = $this->getRoles()->sortByDesc('level')->first()) ? $role->level : 0;
     }
 
-    /**
-     * Get all permissions from roles.
-     *
-     * @return Builder
-     */
-    public function rolePermissions()
-    {
-        $permissionModel = app(config('roles.models.permission'));
-
-        if (!$permissionModel instanceof Model) {
-            throw new \InvalidArgumentException('[roles.models.permission] must be an instance of \Illuminate\Database\Eloquent\Model');
-        }
-
-        return $permissionModel
-            ::select(['permissions.*', 'permission_role.created_at as pivot_created_at', 'permission_role.updated_at as pivot_updated_at'])
-            ->join('permission_role', 'permission_role.permission_id', '=', 'permissions.id')
-            ->join('roles', 'roles.id', '=', 'permission_role.role_id')
-            ->whereIn('roles.id', $this->getRoles()->pluck('id')->toArray())
-            ->orWhere('roles.level', '<', $this->level())
-            ->groupBy(['permissions.id', 'permissions.name', 'permissions.slug', 'permissions.description', 'permissions.model', 'permissions.created_at', 'permissions.updated_at', 'permissions.deleted_at', 'pivot_created_at', 'pivot_updated_at']);
-    }
-
 
 
 
@@ -395,11 +373,7 @@ trait HasRoleAndPermission
      */
     public function allowed($providedPermission, Model $entity, $owner = true, $ownerColumn = 'user_id')
     {
-        if ($this->isPretendEnabled()) {
-            return $this->pretend('allowed');
-        }
-
-        if ($owner === true && $entity->{$ownerColumn} == $this->id) {
+        if (true === $owner && $entity->{$ownerColumn} == $this->id) {
             return true;
         }
 
@@ -453,28 +427,6 @@ trait HasRoleAndPermission
         $this->permissions = null;
 
         return $this->userPermissions()->sync($permissions);
-    }
-
-    /**
-     * Check if pretend option is enabled.
-     *
-     * @return bool
-     */
-    private function isPretendEnabled()
-    {
-        return (bool) config('roles.pretend.enabled');
-    }
-
-    /**
-     * Allows to pretend or simulate package behavior.
-     *
-     * @param string $option
-     *
-     * @return bool
-     */
-    private function pretend($option)
-    {
-        return (bool) config('roles.pretend.options.'.$option);
     }
 
 

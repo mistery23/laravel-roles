@@ -7,44 +7,39 @@ use Mistery23\LaravelRoles\App\Http\Middleware\VerifyLevel;
 use Mistery23\LaravelRoles\App\Http\Middleware\VerifyPermission;
 use Mistery23\LaravelRoles\App\Http\Middleware\VerifyRole;
 use Mistery23\LaravelRoles\Contracts;
-use Mistery23\LaravelRoles\Database\Seeds\DefaultConnectRelationshipsSeeder;
-use Mistery23\LaravelRoles\Database\Seeds\DefaultPermissionsTableSeeder;
-use Mistery23\LaravelRoles\Database\Seeds\DefaultRolesTableSeeder;
-use Mistery23\LaravelRoles\Database\Seeds\DefaultUsersTableSeeder;
 use Mistery23\LaravelRoles\Model\Entity\Permission;
 use Mistery23\LaravelRoles\Model\Entity\Role;
 use Mistery23\LaravelRoles\Model\ReadModels;
 use Mistery23\LaravelRoles\Model\Utils;
 
 
+/**
+ * Class RolesServiceProvider
+ */
 class RolesServiceProvider extends ServiceProvider
 {
-    private $packageTag = 'laravelroles';
 
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
+     * @var string
      */
-    protected $defer = false;
+    private $packageTag = 'laravelroles';
+
 
     /**
      * Bootstrap any application services.
      *
-     * @param \Illuminate\Routing\Router $router The router
-     *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->app['router']->aliasMiddleware('role', VerifyRole::class);
         $this->app['router']->aliasMiddleware('permission', VerifyPermission::class);
         $this->app['router']->aliasMiddleware('level', VerifyLevel::class);
 
         if (config('roles.rolesApiEnabled')) {
-            $this->loadRoutesFrom(__DIR__.'/routes/api.php');
+            $this->loadRoutesFrom(dirname(__DIR__) . '/routes/api.php');
         }
-        $this->loadTranslationsFrom(__DIR__.'/resources/lang/', $this->packageTag);
+        $this->loadTranslationsFrom(dirname(__DIR__) . '/resources/lang/', $this->packageTag);
 
         $this->registerBladeExtensions();
     }
@@ -54,13 +49,12 @@ class RolesServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(dirname(__DIR__) . '/config/roles.php', 'roles');
-        $this->loadMigrationsFrom(__DIR__.'/Database/Migrations');
+        $this->loadMigrationsFrom(__DIR__. ' /Database/Migrations');
 
         $this->publishFiles();
-        //$this->loadSeedsFrom();
 
         $this->app->bind(Utils\SplitterInterface::class, Utils\Splitter::class);
 
@@ -75,62 +69,30 @@ class RolesServiceProvider extends ServiceProvider
     }
 
     /**
-     * Loads a seeds.
-     *
-     * @return void
-     */
-    private function loadSeedsFrom()
-    {
-        if (config('roles.defaultSeeds.PermissionsTableSeeder')) {
-            $this->app['seed.handler']->register(
-                DefaultPermissionsTableSeeder::class
-            );
-        }
-
-        if (config('roles.defaultSeeds.RolesTableSeeder')) {
-            $this->app['seed.handler']->register(
-                DefaultRolesTableSeeder::class
-            );
-        }
-
-        if (config('roles.defaultSeeds.ConnectRelationshipsSeeder')) {
-            $this->app['seed.handler']->register(
-                DefaultConnectRelationshipsSeeder::class
-            );
-        }
-
-        if (config('roles.defaultSeeds.UsersTableSeeder')) {
-            $this->app['seed.handler']->register(
-                DefaultUsersTableSeeder::class
-            );
-        }
-    }
-
-    /**
      * Publish files for package.
      *
      * @return void
      */
-    private function publishFiles()
+    private function publishFiles(): void
     {
         $publishTag = $this->packageTag;
 
         $this->publishes([
-            __DIR__.'/config/roles.php' => config_path('roles.php'),
+            dirname(__DIR__) . '/config/roles.php' => config_path('roles.php'),
         ], $publishTag.'-config');
 
         $this->publishes([
-            __DIR__.'/Database/Migrations' => database_path('migrations'),
+            __DIR__ . '/Database/Migrations' => database_path('migrations'),
         ], $publishTag.'-migrations');
 
         $this->publishes([
-            __DIR__.'/Database/Seeds/publish' => database_path('seeds'),
+            __DIR__ . '/Database/Seeds/publish' => database_path('seeds') . '/rbac',
         ], $publishTag.'-seeds');
 
         $this->publishes([
-            __DIR__.'/config/roles.php'       => config_path('roles.php'),
-            __DIR__.'/Database/Migrations'    => database_path('migrations'),
-            __DIR__.'/Database/Seeds/publish' => database_path('seeds'),
+            dirname(__DIR__) . '/config/roles.php'       => config_path('roles.php'),
+            __DIR__ . '/Database/Migrations'    => database_path('migrations'),
+            __DIR__ . '/Database/Seeds/publish' => database_path('seeds'),
         ], $publishTag);
     }
 
@@ -139,7 +101,7 @@ class RolesServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function registerBladeExtensions()
+    protected function registerBladeExtensions(): void
     {
         $blade = $this->app['view']->getEngineResolver()->resolve('blade')->getCompiler();
 
