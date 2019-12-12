@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Mistery23\LaravelRoles\App\Http\Middleware\VerifyLevel;
 use Mistery23\LaravelRoles\App\Http\Middleware\VerifyPermission;
 use Mistery23\LaravelRoles\App\Http\Middleware\VerifyRole;
+use Mistery23\LaravelRoles\Console\Commands\Roles;
 use Mistery23\LaravelRoles\Contracts;
 use Mistery23\LaravelRoles\Model\Entity\Permission;
 use Mistery23\LaravelRoles\Model\Entity\Role;
@@ -35,6 +36,12 @@ class RolesServiceProvider extends ServiceProvider
         $this->app['router']->aliasMiddleware('role', VerifyRole::class);
         $this->app['router']->aliasMiddleware('permission', VerifyPermission::class);
         $this->app['router']->aliasMiddleware('level', VerifyLevel::class);
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                Roles::class,
+            ]);
+        }
 
         if (config('roles.rolesApiEnabled')) {
             $this->loadRoutesFrom(dirname(__DIR__) . '/routes/api.php');
@@ -86,13 +93,9 @@ class RolesServiceProvider extends ServiceProvider
         ], $publishTag.'-migrations');
 
         $this->publishes([
-            __DIR__ . '/Database/Seeds/publish' => database_path('seeds') . '/rbac',
-        ], $publishTag.'-seeds');
-
-        $this->publishes([
             dirname(__DIR__) . '/config/roles.php'       => config_path('roles.php'),
+            dirname(__DIR__) . '/config/roles-seed.php'       => config_path('roles-seed.php'),
             __DIR__ . '/Database/Migrations'    => database_path('migrations'),
-            __DIR__ . '/Database/Seeds/publish' => database_path('seeds'),
         ], $publishTag);
     }
 
