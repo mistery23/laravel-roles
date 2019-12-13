@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use Mistery23\LaravelRoles\Model\Entity\PermissionUser;
 use Mistery23\LaravelRoles\Model\Entity\RoleUser;
 use Mistery23\LaravelRoles\Model\ReadModels\PermissionQueriesInterface;
+use Mistery23\LaravelRoles\Model\ReadModels\RoleQueriesInterface;
 use Mistery23\LaravelRoles\Model\Utils\SplitterInterface;
 use Mistery23\EloquentSmartPushRelations\SmartPushRelations;
 use Webmozart\Assert\Assert;
@@ -210,9 +211,9 @@ trait HasRoleAndPermission
      */
     public function checkRole($role): bool
     {
-        return $this->roles->contains(static function ($value) use ($role) {
-            return $role === $value->id || Str::is($role, $value->slug);
-        });
+        $queries = app(RoleQueriesInterface::class);
+
+        return $queries->hasRole((string) Auth::user()->getAuthIdentifier(), $role);
     }
 
     /**

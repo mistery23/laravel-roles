@@ -1,6 +1,29 @@
 <?php
 
 return [
+    'users' => [
+        'root' => [
+            'email'    => 'root@root.root',
+            'password' => 'secret',
+            'roles'    => ['root'],
+        ],
+        'admin' => [
+            'email'    => 'admin@admin.admin',
+            'password' => 'secret',
+            'roles'    => ['admin'],
+        ],
+        'manager' => [
+            'email'    => 'manager@manager.manager',
+            'password' => 'secret',
+            'roles'    => ['manager'],
+        ],
+        'client' => [
+            'email'    => 'client@client.client',
+            'password' => 'secret',
+            'roles'    => ['client'],
+        ],
+    ],
+
     'roles' => [
         'root' => [
             'name'        => 'Root',
