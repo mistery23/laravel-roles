@@ -69,9 +69,11 @@ class Handler
 
         Assert::notNull($role, 'Role not found.');
 
-        $permissions = $this->permQueries->getByIdWithChildren($command->permissionId);
+        $permission = $this->permQueries->getById($command->permissionId);
 
-        $role->attachPermissions($permissions);
+        Assert::notNull($permission, 'Permission not found.');
+
+        $role->attachPermission($permission->id);
 
         try {
             $this->db->beginTransaction();

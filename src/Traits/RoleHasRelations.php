@@ -42,23 +42,6 @@ trait RoleHasRelations
     }
 
     /**
-     * Attach permissions to a role.
-     *
-     * @param Collection $permissions
-     */
-    public function attachPermissions(Collection $permissions): void
-    {
-        foreach ($permissions as $permission) {
-            try {
-                $this->attachPermission($permission->id);
-            } catch (\InvalidArgumentException $exception) {
-                //@todo add log
-            }
-
-        }
-    }
-
-    /**
      * Attach permission to a role.
      *
      * @param string $permissionId
@@ -70,22 +53,6 @@ trait RoleHasRelations
         Assert::false($flag, 'Permission is already attached');
 
         $this->permissions->add(RolePermission::new($this->id, $permissionId));
-    }
-
-    /**
-     * Detach permissions from a role.
-     *
-     * @param Collection $permissions
-     */
-    public function detachPermissions(Collection $permissions)
-    {
-        foreach ($permissions as $permission) {
-            try {
-                $this->detachPermission($permission->id);
-            } catch (\InvalidArgumentException $e) {
-                //@todo add log
-            }
-        }
     }
 
     /**

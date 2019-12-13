@@ -82,24 +82,6 @@ trait HasRoleAndPermission
     }
 
     /**
-     * Attach permissions to a user.
-     *
-     * @param Collection $permissions
-     *
-     * @return void
-     */
-    public function attachPermissions(Collection $permissions): void
-    {
-        foreach ($permissions as $permission) {
-            try {
-                $this->attachPermission($permission->id);
-            } catch (\InvalidArgumentException $e) {
-                //@todo add log
-            }
-        }
-    }
-
-    /**
      * Attach permission to a user.
      *
      * @param string $permissionId
@@ -113,24 +95,6 @@ trait HasRoleAndPermission
         Assert::false($flag, 'Permission is already attached');
 
         $this->permissions->add(PermissionUser::new($this->id, $permissionId));
-    }
-
-    /**
-     * Detach permission from a user.
-     *
-     * @param Collection $permissions
-     *
-     * @return void
-     */
-    public function detachPermissions(Collection $permissions): void
-    {
-        foreach ($permissions as $permission) {
-            try {
-                $this->detachPermission($permission->id);
-            } catch (\InvalidArgumentException $e) {
-                //@todo add log
-            }
-        }
     }
 
     /**

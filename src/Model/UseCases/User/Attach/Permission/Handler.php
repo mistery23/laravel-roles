@@ -70,9 +70,11 @@ class Handler
 
         Assert::notNull($user, 'User is not found!');
 
-        $permissions = $this->permQueries->getByIdWithChildren($command->permissionId);
+        $permission = $this->permQueries->getById($command->permissionId);
 
-        $user->attachPermissions($permissions);
+        Assert::notNull($permission, 'Permission is not found!');
+
+        $user->attachPermission($permission->id);
 
         try {
             $this->db->beginTransaction();
