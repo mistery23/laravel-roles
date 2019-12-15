@@ -3,7 +3,6 @@
 namespace Mistery23\LaravelRoles\Model\ReadModels;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Mistery23\LaravelRoles\Model\Entity\Role\Role;
 
@@ -70,7 +69,7 @@ class RoleQueries implements RoleQueriesInterface
             ->where(config('roles.roleUserTable') . '.user_id', $userId)
             ->get()
             ->map(static function ($value) use (&$query) {
-                $query->where(config('roles.rolesTable') . '.id', $value->role_id);
+                $query->orWhere(config('roles.rolesTable') . '.id', $value->role_id);
             });
 
         $query->whereNull(config('roles.rolesTable') . '.deleted_at')
