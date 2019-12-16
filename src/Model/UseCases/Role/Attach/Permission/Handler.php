@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Mistery23\LaravelRoles\Model\UseCases\Role\Attach\Permission;
 
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Facades\DB;
 use Mistery23\LaravelRoles\Model\Entity\Role;
 use Mistery23\LaravelRoles\Model\ReadModels\PermissionQueriesInterface;
@@ -17,7 +18,7 @@ class Handler
 {
 
     /**
-     * @var \Illuminate\Database\ConnectionInterface
+     * @var ConnectionInterface
      */
     private $db;
 

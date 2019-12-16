@@ -1,11 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mistery23\LaravelRoles\Traits;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Mistery23\LaravelRoles\Model\Entity\PermissionUser;
@@ -16,6 +16,9 @@ use Mistery23\LaravelRoles\Model\Utils\SplitterInterface;
 use Mistery23\EloquentSmartPushRelations\SmartPushRelations;
 use Webmozart\Assert\Assert;
 
+/**
+ * Trait HasRoleAndPermission
+ */
 trait HasRoleAndPermission
 {
     use SmartPushRelations;
@@ -274,64 +277,22 @@ trait HasRoleAndPermission
         return app(SplitterInterface::class)->getArrayFrom($argument);
     }
 
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Detach all roles from a user.
-     *
-     * @return int
-     */
-    public function detachAllRoles()
-    {
-        $this->roles = null;
-
-        return $this->roles()->detach();
-    }
-
-    /**
-     * Sync roles for a user.
-     *
-     * @param array|\Mistery23\LaravelRoles\Model\Role[]|\Illuminate\Database\Eloquent\Collection $roles
-     *
-     * @return array
-     */
-    public function syncRoles($roles)
-    {
-        $this->roles = null;
-
-        return $this->roles()->sync($roles);
-    }
-
     /**
      * Get role level of a user.
      *
-     * @return int
+     * @return integer
      */
     public function level()
     {
-        return ($role = $this->getRoles()->sortByDesc('level')->first()) ? $role->level : 0;
+        return ($role = $this->roles()->sortByDesc('level')->first()) ? $role->level : 0;
     }
-
-
-
-
-
-
 
     /**
      * Check if the user is allowed to manipulate with entity.
      *
      * @param string $providedPermission
      * @param Model  $entity
-     * @param bool   $owner
+     * @param boolean   $owner
      * @param string $ownerColumn
      *
      * @return bool
@@ -366,36 +327,11 @@ trait HasRoleAndPermission
         return false;
     }
 
-
-
     /**
-     * Detach all permissions from a user.
-     *
-     * @return int
+     * @param $method
+     * @param $parameters
+     * @return bool
      */
-    public function detachAllPermissions()
-    {
-        $this->permissions = null;
-
-        return $this->userPermissions()->detach();
-    }
-
-    /**
-     * Sync permissions for a user.
-     *
-     * @param array|\Mistery23\LaravelRoles\Model\Permission[]|\Illuminate\Database\Eloquent\Collection $permissions
-     *
-     * @return array
-     */
-    public function syncPermissions($permissions)
-    {
-        $this->permissions = null;
-
-        return $this->userPermissions()->sync($permissions);
-    }
-
-
-
     public function callMagic($method, $parameters)
     {
         if (starts_with($method, 'is')) {
@@ -403,12 +339,24 @@ trait HasRoleAndPermission
         } elseif (starts_with($method, 'can')) {
             return $this->hasPermission(Str::snake(substr($method, 3), config('roles.separator')));
         } elseif (starts_with($method, 'allowed')) {
-            return $this->allowed(Str::snake(substr($method, 7), config('roles.separator')), $parameters[0], (isset($parameters[1])) ? $parameters[1] : true, (isset($parameters[2])) ? $parameters[2] : 'user_id');
+            return $this->allowed(
+                Str::snake(substr($method, 7),
+                config('roles.separator')),
+                $parameters[0],
+                (isset($parameters[1])) ? $parameters[1] : true,
+                (isset($parameters[2])) ? $parameters[2] : 'user_id'
+            );
         }
 
         return parent::__call($method, $parameters);
     }
 
+    /**
+     * @param $method
+     * @param $parameters
+     *
+     * @return boolean
+     */
     public function __call($method, $parameters)
     {
         return $this->callMagic($method, $parameters);

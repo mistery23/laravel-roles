@@ -1,15 +1,36 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mistery23\LaravelRoles\Model\Entity\Permission\Repository;
 
-use Mistery23\LaravelRoles\Model\Entity\Permission\Permission;
+use Mistery23\LaravelRoles\Model\Entity\Permission\Permission as Model;
 
+/**
+ * Interface PermissionRepositoryInterface
+ */
 interface PermissionRepositoryInterface
 {
 
-    public function add(Permission $role);
 
-    public function update(Permission $role);
+    /**
+     * @param Model $model
+     *
+     * @return void
+     */
+    public function add(Model $model): void;
 
-    public function remove(Permission $role);
+    /**
+     * @param Model $model
+     *
+     * @return void
+     */
+    public function update(Model $model): void;
+
+    /**
+     * @param Model $model
+     *
+     * @return void
+     */
+    public function remove(Model $model): void;
 }

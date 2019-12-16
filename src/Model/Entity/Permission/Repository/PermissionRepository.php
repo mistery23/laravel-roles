@@ -2,57 +2,53 @@
 
 namespace Mistery23\LaravelRoles\Model\Entity\Permission\Repository;
 
-use Mistery23\LaravelRoles\Model\Entity\Permission\Permission;
+use Mistery23\LaravelRoles\Model\Entity\Permission\Permission as Model;
 
-
+/**
+ * Class PermissionRepository
+ */
 class PermissionRepository implements PermissionRepositoryInterface
 {
 
     /**
-     * Add role
-     *
-     * @param Permission $permission
+     * @param Model $model
      *
      * @return void
      *
      * @throws \RuntimeException
      */
-    public function add(Permission $permission): void
+    public function add(Model $model): void
     {
-        if (false === $permission->save()) {
+        if (false === $model->save()) {
             throw new \RuntimeException('Save error.');
         }
     }
 
     /**
-     * Add user
-     *
-     * @param Permission $permission
+     * @param Model $model
      *
      * @return void
      *
      * @throws \RuntimeException
      */
-    public function update(Permission $permission): void
+    public function update(Model $model): void
     {
-        if (false === $permission->push()) {
+        if (false === $model->push()) {
             throw new \RuntimeException('Update error.');
         }
     }
 
     /**
-     * Add role
-     *
-     * @param Permission $permission
+     * @param Model $model
      *
      * @return void
      *
      * @throws \RuntimeException
      * @throws \Exception
      */
-    public function remove(Permission $permission): void
+    public function remove(Model $model): void
     {
-        if (false === $permission->delete()) {
+        if (false === $model->delete()) {
             throw new \RuntimeException('Delete error.');
         }
     }

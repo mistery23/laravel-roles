@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mistery23\LaravelRoles;
 
 use Illuminate\Support\ServiceProvider;
@@ -12,7 +14,6 @@ use Mistery23\LaravelRoles\Model\Entity\Permission;
 use Mistery23\LaravelRoles\Model\Entity\Role;
 use Mistery23\LaravelRoles\Model\ReadModels;
 use Mistery23\LaravelRoles\Model\Utils;
-
 
 /**
  * Class RolesServiceProvider
@@ -46,6 +47,7 @@ class RolesServiceProvider extends ServiceProvider
         if (config('roles.rolesApiEnabled')) {
             $this->loadRoutesFrom(dirname(__DIR__) . '/routes/api.php');
         }
+
         $this->loadTranslationsFrom(dirname(__DIR__) . '/resources/lang/', $this->packageTag);
 
         $this->registerBladeExtensions();
@@ -59,16 +61,24 @@ class RolesServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(dirname(__DIR__) . '/config/roles.php', 'roles');
-        $this->loadMigrationsFrom(__DIR__. ' /Database/Migrations');
+        $this->loadMigrationsFrom(dirname(__DIR__) . ' /database/migrations');
 
         $this->publishFiles();
 
         $this->app->bind(Utils\SplitterInterface::class, Utils\Splitter::class);
 
-        $this->app->bind(Role\Repository\RoleRepositoryInterface::class, Role\Repository\RoleRepository::class);
+        $this->app->bind(
+            Role\Repository\RoleRepositoryInterface::class,
+            Role\Repository\RoleRepository::class
+        );
+
         $this->app->bind(ReadModels\RoleQueriesInterface::class, ReadModels\RoleQueries::class);
 
-        $this->app->bind(Permission\Repository\PermissionRepositoryInterface::class, Permission\Repository\PermissionRepository::class);
+        $this->app->bind(
+            Permission\Repository\PermissionRepositoryInterface::class,
+            Permission\Repository\PermissionRepository::class
+        );
+
         $this->app->bind(ReadModels\PermissionQueriesInterface::class, ReadModels\PermissionQueries::class);
 
         $this->app->bind(Contracts\UserRepositoryInterface::class, config('roles.dependencies.userRepository'));
@@ -89,13 +99,13 @@ class RolesServiceProvider extends ServiceProvider
         ], $publishTag.'-config');
 
         $this->publishes([
-            __DIR__ . '/Database/Migrations' => database_path('migrations'),
+            dirname(__DIR__) . '/database/migrations' => database_path('migrations'),
         ], $publishTag.'-migrations');
 
         $this->publishes([
             dirname(__DIR__) . '/config/roles.php'       => config_path('roles.php'),
             dirname(__DIR__) . '/config/roles-seed.php'       => config_path('roles-seed.php'),
-            __DIR__ . '/Database/Migrations'    => database_path('migrations'),
+            dirname(__DIR__) . '/database/migrations'    => database_path('migrations'),
         ], $publishTag);
     }
 

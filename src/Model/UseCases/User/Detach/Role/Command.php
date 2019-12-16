@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Mistery23\LaravelRoles\Model\UseCases\User\Detach\Role;
 
-
 /**
  * Class Command
  */

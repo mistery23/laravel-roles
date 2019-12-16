@@ -80,48 +80,11 @@ interface HasRoleAndPermission
     public function detachRole($roleId): void;
 
     /**
-     * Detach all roles from a user.
-     *
-     * @return integer
-     */
-    public function detachAllRoles();
-
-    /**
-     * Sync roles for a user.
-     *
-     * @param array|Role[]|Collection $roles
-     *
-     * @return array
-     */
-    public function syncRoles($roles);
-
-    /**
      * Get role level of a user.
      *
      * @return int
      */
     public function level();
-
-    /**
-     * Get all permissions from roles.
-     *
-     * @return Builder
-     */
-    public function rolePermissions();
-
-    /**
-     * User belongs to many permissions.
-     *
-     * @return BelongsToMany
-     */
-    public function userPermissions();
-
-    /**
-     * Get all permissions as collection.
-     *
-     * @return Collection
-     */
-    public function getPermissions();
 
     /**
      * Check if the user has a permission or permissions.
@@ -175,34 +138,18 @@ interface HasRoleAndPermission
     /**
      * Attach permission to a user.
      *
-     * @param int|Permission $permission
+     * @param string $permission
      *
-     * @return null|bool
+     * @return void
      */
     public function attachPermission($permission);
 
     /**
      * Detach permission from a user.
      *
-     * @param int|Permission $permission
+     * @param string $permission
      *
-     * @return int
+     * @return void
      */
     public function detachPermission($permission);
-
-    /**
-     * Detach all permissions from a user.
-     *
-     * @return int
-     */
-    public function detachAllPermissions();
-
-    /**
-     * Sync permissions for a user.
-     *
-     * @param array|Permission[]|Collection $permissions
-     *
-     * @return array
-     */
-    public function syncPermissions($permissions);
 }

@@ -1,7 +1,7 @@
 {
     "name": "mistery23/laravel-roles",
     "version": "1.0.0",
-    "description": "Powerful package for handling roles, permissions, and levels in Laravel. Supports Laravel 5.3 and higher",
+    "description": "Powerful package for handling roles, permissions, and levels in Laravel.",
     "keywords": [
         "laravel-roles",
         "laravel-permissions",
@@ -31,6 +31,7 @@
     ],
     "require": {
         "php": ">=7.3",
+        "ext-pdo": "*",
         "laravel/framework": "~5.8.0|^6.0",
         "laravel/helpers": "^1.1",
         "mistery23/eloquent-object-relations": "1.*",
@@ -44,6 +45,7 @@
         "illuminate/support": "^5.8",
         "orchestra/testbench": "~3.0",
         "phpunit/phpunit": "^7.5",
+        "squizlabs/php_codesniffer": "3.*",
         "laravel/laravel": "5.8.*"
     },
     "autoload": {

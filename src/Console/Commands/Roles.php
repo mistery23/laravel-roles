@@ -1,9 +1,4 @@
 <?php
-/**
- * PHP version 7.3
- *
- * @author  Oleksandr Barabolia <alexandrbarabolya@gmail.com>
- */
 
 namespace Mistery23\LaravelRoles\Console\Commands;
 

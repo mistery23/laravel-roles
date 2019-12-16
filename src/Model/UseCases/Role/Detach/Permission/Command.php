@@ -1,7 +1,8 @@
 <?php
 
-namespace Mistery23\LaravelRoles\Model\UseCases\Role\Detach\Permission;
+declare(strict_types=1);
 
+namespace Mistery23\LaravelRoles\Model\UseCases\Role\Detach\Permission;
 
 /**
  * Class Command

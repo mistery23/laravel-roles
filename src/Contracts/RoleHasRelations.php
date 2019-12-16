@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mistery23\LaravelRoles\Contracts;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
@@ -28,34 +29,18 @@ interface RoleHasRelations
     /**
      * Attach permission to a role.
      *
-     * @param int|Permission $permission
+     * @param string $permission
      *
-     * @return int|bool
+     * @return void
      */
-    public function attachPermission($permission);
+    public function attachPermission($permission): void;
 
     /**
      * Detach permission from a role.
      *
-     * @param int|Permission $permission
+     * @param string $permission
      *
-     * @return int
+     * @return void
      */
-    public function detachPermission($permission);
-
-    /**
-     * Detach all permissions.
-     *
-     * @return int
-     */
-    public function detachAllPermissions();
-
-    /**
-     * Sync permissions for a role.
-     *
-     * @param array|Permission[]|Collection $permissions
-     *
-     * @return array
-     */
-    public function syncPermissions($permissions);
+    public function detachPermission($permission): void;
 }

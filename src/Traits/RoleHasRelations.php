@@ -1,10 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mistery23\LaravelRoles\Traits;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Mistery23\LaravelRoles\Model\Entity\Permission\Permission;
 use Mistery23\LaravelRoles\Model\Entity\RolePermission;
 use Webmozart\Assert\Assert;
 
@@ -13,6 +13,8 @@ use Webmozart\Assert\Assert;
  */
 trait RoleHasRelations
 {
+
+
     /**
      * Role belongs to many permissions.
      *
@@ -60,34 +62,12 @@ trait RoleHasRelations
      *
      * @param string $permissionId
      */
-    public function detachPermission($permissionId)
+    public function detachPermission($permissionId): void
     {
         $flag = $this->permissions->contains($permissionId);
 
         Assert::true($flag, 'Permission is not attached');
 
         $this->detachItem('permissions', $permissionId);
-    }
-
-    /**
-     * Detach all permissions.
-     *
-     * @return int
-     */
-    public function detachAllPermissions()
-    {
-        return $this->permissions()->detach();
-    }
-
-    /**
-     * Sync permissions for a role.
-     *
-     * @param array|Permission[]|Collection $permissions
-     *
-     * @return array
-     */
-    public function syncPermissions($permissions)
-    {
-        return $this->permissions()->sync($permissions);
     }
 }

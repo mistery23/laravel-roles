@@ -23,19 +23,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Slug Separator
-    |--------------------------------------------------------------------------
-    |
-    | Here you can change the slug separator. This is very important in matter
-    | of magic method __call() and also a `Slugable` trait. The default value
-    | is a dot.
-    |
-    */
-
-    'separator' => env('ROLES_DEFAULT_SEPARATOR', '.'),
-
-    /*
-    |--------------------------------------------------------------------------
     | Models
     |--------------------------------------------------------------------------
     |
@@ -57,24 +44,6 @@ return [
     'dependencies' => [
         'userRepository' => env('USER_REPOSITORY', \App\Model\User\Entity\User\Repository\UserRepository::class),
         'userQueries'    => env('USER_QUERIES', \App\Model\User\Entity\User\Repository\UserQueries::class),
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Default Seeds
-    |--------------------------------------------------------------------------
-    |
-    | These are the default package seeds. You can seed the package built
-    | in seeds without having to seed them. These seed directly from
-    | the package. These are not the published seeds.
-    |
-    */
-
-    'defaultSeeds' => [
-        'PermissionsTableSeeder'        => env('ROLES_SEED_DEFAULT_PERMISSIONS', true),
-        'RolesTableSeeder'              => env('ROLES_SEED_DEFAULT_ROLES', true),
-        'ConnectRelationshipsSeeder'    => env('ROLES_SEED_DEFAULT_RELATIONSHIPS', true),
-        'UsersTableSeeder'              => env('ROLES_SEED_DEFAULT_USERS', false),
     ],
 
     /*

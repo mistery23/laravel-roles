@@ -3,10 +3,14 @@
 namespace Mistery23\LaravelRoles\App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Mistery23\LaravelRoles\App\Http\Requests;
 use Mistery23\LaravelRoles\Model\ReadModels\PermissionQueriesInterface;
 use Mistery23\LaravelRoles\Model\UseCases\Permission;
 
+/**
+ * Class PermissionsController
+ */
 class PermissionsController extends Controller
 {
 
@@ -29,7 +33,7 @@ class PermissionsController extends Controller
     /**
      * Return all the roles, Permissions, and Users data.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index()
     {
@@ -43,12 +47,13 @@ class PermissionsController extends Controller
         ], 200);
     }
 
-
     /**
      * @param Requests\Permission\CreatePermissionRequest $request
      * @param Permission\Create\Handler $handler
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
+     *
+     * @throws \Exception
      */
     public function store(Requests\Permission\CreatePermissionRequest $request, Permission\Create\Handler $handler)
     {
@@ -92,7 +97,7 @@ class PermissionsController extends Controller
      * @param Requests\Permission\UpdatePermissionRequest $request
      * @param Permission\Edit\Handler $handler
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function edit(
         string $permissionId,
@@ -137,7 +142,10 @@ class PermissionsController extends Controller
     /**
      * Destroy a permission.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @param string $permissionId
+     * @param Permission\Remove\Handler $handler
+     *
+     * @return JsonResponse
      */
     public function destroy(string $permissionId, Permission\Remove\Handler $handler)
     {
@@ -157,6 +165,12 @@ class PermissionsController extends Controller
         ], 200);
     }
 
+    /**
+     * @param string $permissionId
+     * @param Requests\Permission\DoChildPermissionRequest $request
+     * @param Permission\DoChild\Handler $handler
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function doChild(
         string $permissionId,
         Requests\Permission\DoChildPermissionRequest $request,
@@ -170,8 +184,7 @@ class PermissionsController extends Controller
         try {
             $handler->handle($command);
         } catch (\Exception $e) {
-            return response()
-                ->json(['error' => $e->getMessage()], 400);
+            return response()->json(['error' => $e->getMessage()], 400);
         }
 
         return response()->json([
@@ -181,10 +194,14 @@ class PermissionsController extends Controller
         ], 200);
     }
 
+    /**
+     * @param string $permissionId
+     * @param Permission\DoRoot\Handler $handler
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function doRoot(
         string $permissionId,
         Permission\DoRoot\Handler $handler
-
     ) {
         $command = new Permission\DoRoot\Command(
             $permissionId,

@@ -2,57 +2,54 @@
 
 namespace Mistery23\LaravelRoles\Model\Entity\Role\Repository;
 
-use Mistery23\LaravelRoles\Model\Entity\Role\Role;
+use Mistery23\LaravelRoles\Model\Entity\Role\Role as Model;
 
-
+/**
+ * Class RoleRepository
+ */
 class RoleRepository implements RoleRepositoryInterface
 {
 
+
     /**
-     * Add role
-     *
-     * @param Role $role
+     * @param Model $model
      *
      * @return void
      *
      * @throws \RuntimeException
      */
-    public function add(Role $role): void
+    public function add(Model $model): void
     {
-        if (false === $role->push()) {
+        if (false === $model->push()) {
             throw new \RuntimeException('Save error.');
         }
     }
 
     /**
-     * Update role
-     *
-     * @param Role $role
+     * @param Model $model
      *
      * @return void
      *
      * @throws \RuntimeException
      */
-    public function update(Role $role): void
+    public function update(Model $model): void
     {
-        if (false === $role->push()) {
+        if (false === $model->push()) {
             throw new \RuntimeException('Update error.');
         }
     }
 
     /**
-     * Remove role
-     *
-     * @param Role $role
+     * @param Model $model
      *
      * @return void
      *
      * @throws \RuntimeException
      * @throws \Exception
      */
-    public function remove(Role $role): void
+    public function remove(Model $model): void
     {
-        if (false === $role->delete()) {
+        if (false === $model->delete()) {
             throw new \RuntimeException('Delete error.');
         }
     }

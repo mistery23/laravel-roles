@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Mistery23\LaravelRoles\Model\UseCases\User\Attach\Permission;
 
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Facades\DB;
 use Mistery23\LaravelRoles\Contracts\UserQueriesInterface;
 use Mistery23\LaravelRoles\Contracts\UserRepositoryInterface;
 use Mistery23\LaravelRoles\Model\ReadModels\PermissionQueriesInterface;
 use Webmozart\Assert\Assert;
-
 
 /**
  * Class Handler
@@ -18,7 +18,7 @@ class Handler
 {
 
     /**
-     * @var \Illuminate\Database\ConnectionInterface
+     * @var ConnectionInterface
      */
     private $db;
 

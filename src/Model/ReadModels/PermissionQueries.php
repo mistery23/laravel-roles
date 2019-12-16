@@ -66,7 +66,6 @@ class PermissionQueries implements PermissionQueriesInterface
                 config('roles.usersTable') . '.id',
                 '=',
                 config('roles.roleUserTable') . '.user_id'
-
             )
             ->where(config('roles.roleUserTable') . '.user_id', $userId)
             ->get()
@@ -122,16 +121,16 @@ class PermissionQueries implements PermissionQueriesInterface
             $query->whereNull(config('roles.permissionsTable') . '.deleted_at');
 
             $query->unionAll(
-                    DB::table(config('roles.permissionsTable'))
-                        ->select([
-                            config('roles.permissionsTable') . '.id',
-                            config('roles.permissionsTable') . '.name',
-                            config('roles.permissionsTable'). '.slug',
-                            config('roles.permissionsTable') . '.parent_id',
-                        ])
-                        ->whereNull(config('roles.permissionsTable') . '.deleted_at')
-                        ->join('tree', 'tree.id', '=', config('roles.permissionsTable') . '.parent_id')
-                );
+                DB::table(config('roles.permissionsTable'))
+                    ->select([
+                        config('roles.permissionsTable') . '.id',
+                        config('roles.permissionsTable') . '.name',
+                        config('roles.permissionsTable'). '.slug',
+                        config('roles.permissionsTable') . '.parent_id',
+                    ])
+                    ->whereNull(config('roles.permissionsTable') . '.deleted_at')
+                    ->join('tree', 'tree.id', '=', config('roles.permissionsTable') . '.parent_id')
+            );
 
             $tree = DB::table('tree')
                 ->withRecursiveExpression('tree', $query)

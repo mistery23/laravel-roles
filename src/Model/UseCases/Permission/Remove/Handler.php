@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Mistery23\LaravelRoles\Model\UseCases\Permission\Remove;
 
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Facades\DB;
 use Mistery23\LaravelRoles\Model\Entity\Permission;
 use Mistery23\LaravelRoles\Model\ReadModels\PermissionQueriesInterface;
@@ -15,7 +16,7 @@ class Handler
 {
 
     /**
-     * @var \Illuminate\Database\ConnectionInterface
+     * @var ConnectionInterface
      */
     private $db;
 
@@ -49,6 +50,7 @@ class Handler
     /**
      * @param Command $command
      *
+     * @throws \PDOException
      * @throws \RuntimeException
      *
      * @return void

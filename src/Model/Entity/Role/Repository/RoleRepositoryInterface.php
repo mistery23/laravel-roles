@@ -2,14 +2,32 @@
 
 namespace Mistery23\LaravelRoles\Model\Entity\Role\Repository;
 
-use Mistery23\LaravelRoles\Model\Entity\Role\Role;
+use Mistery23\LaravelRoles\Model\Entity\Role\Role as Model;
 
+/**
+ * Interface RoleRepositoryInterface
+ */
 interface RoleRepositoryInterface
 {
 
-    public function add(Role $role);
+    /**
+     * @param Model $model
+     *
+     * @return void
+     */
+    public function add(Model $model): void;
 
-    public function update(Role $role);
+    /**
+     * @param Model $model
+     *
+     * @return void
+     */
+    public function update(Model $model): void;
 
-    public function remove(Role $role);
+    /**
+     * @param Model $model
+     *
+     * @return void
+     */
+    public function remove(Model $model): void;
 }

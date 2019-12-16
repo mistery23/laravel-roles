@@ -1,18 +1,5 @@
 # Laravel Roles
 
-[![Total Downloads](https://poser.pugx.org/jeremykenedy/laravel-roles/d/total.svg)](https://packagist.org/packages/jeremykenedy/laravel-roles)
-[![Latest Stable Version](https://poser.pugx.org/jeremykenedy/laravel-roles/v/stable.svg)](https://packagist.org/packages/jeremykenedy/laravel-roles)
-[![Travis-CI Build Status](https://travis-ci.org/jeremykenedy/laravel-roles.svg?branch=master)](https://travis-ci.org/jeremykenedy/laravel-roles)
-[![Scrutinizer-CI Build Status](https://scrutinizer-ci.com/g/jeremykenedy/laravel-roles/badges/build.png?b=master)](https://scrutinizer-ci.com/g/jeremykenedy/laravel-roles/build-status/master)
-[![StyleCI](https://github.styleci.io/repos/82768379/shield?branch=master)](https://github.styleci.io/repos/82768379)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jeremykenedy/laravel-roles/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jeremykenedy/laravel-roles/?branch=master)
-[![Code Intelligence Status](https://scrutinizer-ci.com/g/jeremykenedy/laravel-roles/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![MadeWithLaravel.com shield](https://madewithlaravel.com/storage/repo-shields/1363-shield.svg)](https://madewithlaravel.com/p/laravel-roles/shield-link)
-<a href="https://www.patreon.com/bePatron?u=10119959" title="Become a Patreon">
-    <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patreon" width="85px" > 
-</a>
-
 #### Table of contents
 - [About](#about)
 - [Features](#features)
@@ -48,7 +35,7 @@
 
 ## About
 A Powerful package for handling roles and permissions in Laravel.
-Supports Laravel 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, and 6.0.
+Supports Laravel 5.8, and 6.0.
 
 ## Features
 | Laravel Roles Features  |
@@ -74,20 +61,11 @@ Laravel 5.8 and up use:
     composer require jeremykenedy/laravel-roles
 ```
 
-Laravel 5.7 and below use:
-
-```
-    composer require jeremykenedy/laravel-roles:1.4.0
-```
-
 * Note: The major difference is that Laravel's users table migration out the box changed from `$table->increments('id');` to `$table->bigIncrements('id');` in Laravel 5.8.
 
 ### Service Provider
-* Laravel 5.5 and up
+* Laravel 5.8 and up
 Uses package auto discovery feature, no need to edit the `config/app.php` file.
-
-* Laravel 5.4 and below
-Add the package to your application service providers in `config/app.php` file.
 
 ```php
 'providers' => [
@@ -97,7 +75,7 @@ Add the package to your application service providers in `config/app.php` file.
     /**
      * Third Party Service Providers...
      */
-    jeremykenedy\LaravelRoles\RolesServiceProvider::class,
+    Mistery23\LaravelRoles\RolesServiceProvider::class,
 
 ],
 ```
@@ -111,7 +89,6 @@ Add the package to your application service providers in `config/app.php` file.
 ```bash
     php artisan vendor:publish --tag=laravelroles-config
     php artisan vendor:publish --tag=laravelroles-migrations
-    php artisan vendor:publish --tag=laravelroles-seeds
 ```
 
 ### HasRoleAndPermission Trait And Contract
@@ -128,10 +105,9 @@ Example `User` model Trait And Contract:
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use jeremykenedy\LaravelRoles\Traits\HasRoleAndPermission;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Mistery23\LaravelRoles\Traits\HasRoleAndPermission;
 
 class User extends Authenticatable
 {
@@ -150,97 +126,76 @@ class User extends Authenticatable
 
     `php artisan migrate`
 
-2. Update `database\seeds\DatabaseSeeder.php` to include the seeds. See example below.
+2. Check `config/roles-seed.php`. For create/update your role and perm.
+2. Setup role and perm:
 
+    `php artisan roles:gen`
 
-```php
-<?php
+3. Seed an initial set of Permissions, Roles. Attach role/permission to user please implement in your project.
+For this you should use complete use cases:
 
-use Illuminate\Database\Seeder;
-use Illuminate\Database\Eloquent\Model;
-use Database\Seeds\PermissionsTableSeeder;
-use Database\Seeds\RolesTableSeeder;
-use Database\Seeds\ConnectRelationshipsSeeder;
-
-class DatabaseSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
-        Model::unguard();
-
-            $this->call(PermissionsTableSeeder::class);
-            $this->call(RolesTableSeeder::class);
-            $this->call(ConnectRelationshipsSeeder::class);
-            //$this->call('UsersTableSeeder');
-
-        Model::reguard();
-    }
-}
-
-```
-
-3. Seed an initial set of Permissions, Roles, and Users with roles.
-
-```bash
-composer dump-autoload
-php artisan db:seed
-```
+ `Mistery23\LaravelRoles\Model\UseCases\User\Attach\Role`
+ `Mistery23\LaravelRoles\Model\UseCases\User\Attach\Permission`
 
 #### Roles Seeded
 |Property|Value|
 |----|----|
+|Name| Root|
+|Slug| root|
+|Description| Root role|
+|Level| 100|
+
+|Property|Value|
+|----|----|
 |Name| Admin|
 |Slug| admin|
-|Description| Admin Role|
-|Level| 5|
+|Description| Admin role|
+|Level| 90|
+|Parent|root
+|Permissions|portal.administrate
 
 |Property|Value|
 |----|----|
-|Name| User|
-|Slug| user|
-|Description| User Role|
-|Level| 1|
+|Name| Manager|
+|Slug| manager|
+|Description| Manager role|
+|Level| 70|
+|Parent|admin|
+|Permissions|portal.user.manage, portal.user.manage.create
 
 |Property|Value|
 |----|----|
-|Name| Unverified|
-|Slug| unverified|
-|Description| Unverified Role|
-|Level| 0|
+|Name| Client|
+|Slug| client|
+|Description| Client role|
+|Level| 50|
 
 #### Permissions Seeded:
 |Property|Value|
 |----|----|
-|name|Can View Users|
-|slug|view.users|
-|description|Can view users|
-|model|Permission|
+|name|Portal administrate|
+|slug|portal.administrate|
+|description|Can administrate portal|
 
 |Property|Value|
 |----|----|
-|name|Can Create Users|
-|slug|create.users|
-|description|Can create new users|
-|model|Permission|
+|name|Portal manage user|
+|slug|portal.user.manage|
+|description|Can manage user|
+|parent|portal.administrate
 
 |Property|Value|
 |----|----|
-|name|Can Edit Users|
-|slug|edit.users|
-|description|Can edit users|
-|model|Permission|
+|name|Portal user create|
+|slug|portal.user.manage.create|
+|description|Can user create|
+|parent|portal.user.manage.create
 
 |Property|Value|
 |----|----|
-|name|Can Delete Users|
-|slug|delete.users|
-|description|Can delete users|
-|model|Permission|
+|name|Portal client|
+|slug|portal.use|
+|description|Can use portal|
 
 
 ### And that's it!
@@ -259,57 +214,20 @@ If you migrate from bican/roles to jeremykenedy/LaravelRoles you will need to up
 ### Creating Roles
 
 ```php
-$adminRole = config('roles.models.role')::create([
-    'name' => 'Admin',
-    'slug' => 'admin',
-    'description' => '',
-    'level' => 5,
-]);
+$command = new Mistery23\LaravelRoles\Model\UseCases\Role\Create\Command(
+    'Admin',
+    'admin',
+    90,
+    'Admin role'
+);
 
-$moderatorRole = config('roles.models.role')::create([
-    'name' => 'Forum Moderator',
-    'slug' => 'forum.moderator',
-]);
+app(Mistery23\LaravelRoles\Model\UseCases\Role\Create::class)->handle($command);
+
 ```
 
-> Because of `Slugable` trait, if you make a mistake and for example leave a space in slug parameter, it'll be replaced with a dot automatically, because of `str_slug` function.
+### Attaching, Detaching Role and Permissions
 
-### Attaching, Detaching and Syncing Roles
-
-It's really simple. You fetch a user from database and call `attachRole` method. There is `BelongsToMany` relationship between `User` and `Role` model.
-
-```php
-$user = config('roles.models.defaultUser')::find($id);
-
-$user->attachRole($adminRole); // you can pass whole object, or just an id
-$user->detachRole($adminRole); // in case you want to detach role
-$user->detachAllRoles(); // in case you want to detach all roles
-$user->syncRoles($roles); // you can pass Eloquent collection, or just an array of ids
-```
-
-### Assign a user role to new registered users
-
-You can assign the user a role upon the users registration by updating the file `app\Http\Controllers\Auth\RegisterController.php`.
-You can assign a role to a user upon registration by including the needed models and modifying the `create()` method to attach a user role. See example below:
-
-* Updated `create()` method of `app\Http\Controllers\Auth\RegisterController.php`:
-
-```php
-    protected function create(array $data)
-    {
-        $user = config('roles.models.defaultUser')::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
-
-        $role = config('roles.models.role')::where('name', '=', 'User')->first();  //choose the default role upon user creation.
-        $user->attachRole($role);
-
-        return $user;
-
-    }
-```
+See `Mistery23\LaravelRoles\Model\UseCases\...` for all actions for role, permission and user.
 
 ### Checking For Roles
 
@@ -366,46 +284,6 @@ if ($user->level() > 4) {
 > If user has multiple roles, method `level` returns the highest one.
 
 `Level` has also big effect on inheriting permissions. About it later.
-
-### Creating Permissions
-
-It's very simple thanks to `Permission` model called from `config('roles.models.permission')`.
-
-```php
-
-$createUsersPermission = config('roles.models.permission')::create([
-    'name' => 'Create users',
-    'slug' => 'create.users',
-    'description' => '', // optional
-]);
-
-$deleteUsersPermission = config('roles.models.permission')::create([
-    'name' => 'Delete users',
-    'slug' => 'delete.users',
-]);
-```
-
-### Attaching, Detaching and Syncing Permissions
-
-You can attach permissions to a role or directly to a specific user (and of course detach them as well).
-
-```php
-$role = config('roles.models.role')::find($roleId);
-$role->attachPermission($createUsersPermission); // permission attached to a role
-
-$user = config('roles.models.defaultUser')::find($userId);
-$user->attachPermission($deleteUsersPermission); // permission attached to a user
-```
-
-```php
-$role->detachPermission($createUsersPermission); // in case you want to detach permission
-$role->detachAllPermissions(); // in case you want to detach all permissions
-$role->syncPermissions($permissions); // you can pass Eloquent collection, or just an array of ids
-
-$user->detachPermission($deleteUsersPermission);
-$user->detachAllPermissions();
-$user->syncPermissions($permissions); // you can pass Eloquent collection, or just an array of ids
-```
 
 ### Checking For Permissions
 
@@ -491,8 +369,8 @@ There are four Blade extensions. Basically, it is replacement for classic if sta
 
 ### Middleware
 This package comes with `VerifyRole`, `VerifyPermission` and `VerifyLevel` middleware.
-The middleware aliases are already registered in `\jeremykenedy\LaravelRoles\RolesServiceProvider` as of 1.7.
-You can optionally add them inside your `app/Http/Kernel.php` file with your own aliases like outlined below:
+The middleware aliases are already registered in `\Mistery23\LaravelRoles\RolesServiceProvider`.
+You can optionally add them inside your `App/Http/Kernel.php` file with your own aliases like outlined below:
 
 ```php
 /**
@@ -510,9 +388,9 @@ protected $routeMiddleware = [
     'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
     'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
     'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-    'role'          => \jeremykenedy\LaravelRoles\Middleware\VerifyRole::class,
-    'permission'    => \jeremykenedy\LaravelRoles\Middleware\VerifyPermission::class,
-    'level'         => \jeremykenedy\LaravelRoles\Middleware\VerifyLevel::class,
+    'role'          => \Mistery23\LaravelRoles\Middleware\VerifyRole::class,
+    'permission'    => \Mistery23\LaravelRoles\Middleware\VerifyPermission::class,
+    'level'         => \Mistery23\LaravelRoles\Middleware\VerifyLevel::class,
 ];
 ```
 
@@ -541,7 +419,7 @@ Route::group(['middleware' => ['role:admin']], function () {
 
 ```
 
-It throws `\jeremykenedy\LaravelRoles\App\Exceptions\RoleDeniedException`, `\jeremykenedy\LaravelRoles\App\Exceptions\PermissionDeniedException` or `\jeremykenedy\LaravelRoles\App\Exceptions\LevelDeniedException` exceptions if it goes wrong.
+It throws `\Mistery23\LaravelRoles\App\Exceptions\RoleDeniedException`, `\Mistery23\LaravelRoles\App\Exceptions\PermissionDeniedException` or `\Mistery23\LaravelRoles\App\Exceptions\LevelDeniedException` exceptions if it goes wrong.
 
 You can catch these exceptions inside `app/Exceptions/Handler.php` file and do whatever you want.
 
@@ -556,10 +434,10 @@ You can catch these exceptions inside `app/Exceptions/Handler.php` file and do w
     public function render($request, Exception $exception)
     {
 
-        $userLevelCheck = $exception instanceof \jeremykenedy\LaravelRoles\App\Exceptions\RoleDeniedException ||
-            $exception instanceof \jeremykenedy\LaravelRoles\App\Exceptions\RoleDeniedException ||
-            $exception instanceof \jeremykenedy\LaravelRoles\App\Exceptions\PermissionDeniedException ||
-            $exception instanceof \jeremykenedy\LaravelRoles\App\Exceptions\LevelDeniedException;
+        $userLevelCheck = $exception instanceof \Mistery23\LaravelRoles\App\Exceptions\RoleDeniedException ||
+            $exception instanceof \Mistery23\LaravelRoles\App\Exceptions\RoleDeniedException ||
+            $exception instanceof \Mistery23\LaravelRoles\App\Exceptions\PermissionDeniedException ||
+            $exception instanceof \Mistery23\LaravelRoles\App\Exceptions\LevelDeniedException;
 
         if ($userLevelCheck) {
 
@@ -580,10 +458,9 @@ You can catch these exceptions inside `app/Exceptions/Handler.php` file and do w
 ---
 
 ## Configuration
-* You can change connection for models, slug separator, models path and there is also a handy pretend feature.
+* You can change connection for models, models path and there is also a handy pretend feature.
 * There are many configurable options which have been extended to be able to configured via `.env` file variables.
-* Editing the configuration file directly may not needed becuase of this.
-* See config file: [roles.php](https://github.com/jeremykenedy/laravel-roles/blob/master/src/config/roles.php).
+* Editing the configuration file directly may not needed because of this.
 
 ```php
 
@@ -966,7 +843,6 @@ For more information, please have a look at [HasRoleAndPermission](https://githu
     │   ├── HasRoleAndPermission.php
     │   ├── PermissionHasRelations.php
     │   ├── RoleHasRelations.php
-    │   ├── RolesAndPermissionsHelpersTrait.php
     │   ├── RolesUsageAuthTrait.php
     │   └── Slugable.php
     ├── config

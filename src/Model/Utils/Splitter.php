@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Mistery23\LaravelRoles\Model\Utils;
-
 
 /**
  * Class Splitter
@@ -10,12 +8,13 @@ namespace Mistery23\LaravelRoles\Model\Utils;
 class Splitter implements SplitterInterface
 {
 
+
     /**
      * Get an array from argument.
      *
-     * @param int|string|array $argument
+     * @param integer|string|array $argument
      *
-     * @return array
+     * @return mixed
      */
     public function getArrayFrom($argument)
     {

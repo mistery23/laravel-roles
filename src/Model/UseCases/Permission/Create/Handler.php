@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Mistery23\LaravelRoles\Model\UseCases\Permission\Create;
 
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Facades\DB;
 use Mistery23\LaravelRoles\Model\Entity\Permission;
 use Ramsey\Uuid\Uuid;
@@ -15,7 +16,7 @@ class Handler
 {
 
     /**
-     * @var \Illuminate\Database\ConnectionInterface
+     * @var ConnectionInterface
      */
     private $db;
 
@@ -37,13 +38,14 @@ class Handler
         $this->repository = $repository;
     }
 
-
     /**
      * @param Command $command
      *
-     * @throws \RuntimeException
-     *
      * @return void
+     *
+     * @throws \PDOException
+     * @throws \RuntimeException
+     * @throws \Exception
      */
     public function handle(Command $command): void
     {

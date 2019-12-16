@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Mistery23\LaravelRoles\Model\UseCases\Role\Remove;
 
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Facades\DB;
 use Mistery23\LaravelRoles\Model\Entity\Role;
 use Mistery23\LaravelRoles\Model\ReadModels\RoleQueriesInterface;
@@ -15,7 +16,7 @@ class Handler
 {
 
     /**
-     * @var \Illuminate\Database\ConnectionInterface
+     * @var ConnectionInterface
      */
     private $db;
 
@@ -49,9 +50,10 @@ class Handler
     /**
      * @param Command $command
      *
-     * @throws \RuntimeException
-     *
      * @return void
+     *
+     * @throws \PDOException
+     * @throws \RuntimeException
      */
     public function handle(Command $command): void
     {

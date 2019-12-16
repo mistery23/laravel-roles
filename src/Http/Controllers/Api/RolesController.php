@@ -28,10 +28,9 @@ class RolesController extends Controller
         $this->queries = $queries;
     }
 
+
     /**
-     * Return all the roles, Permissions, and Users data.
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
@@ -64,9 +63,10 @@ class RolesController extends Controller
     }
 
     /**
-     * Creating a new role.
+     * @param Requests\Role\CreateRoleRequest $request
+     * @param Role\Create\Handler $handler
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Requests\Role\CreateRoleRequest $request, Role\Create\Handler $handler)
     {
@@ -102,13 +102,19 @@ class RolesController extends Controller
         ], 201);
     }
 
+
     /**
-     * Edit a new role.
+     * @param string $roleId
+     * @param Requests\Role\UpdateRoleRequest $request
+     * @param Role\Edit\Handler $handler
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function edit(string $roleId, Requests\Role\UpdateRoleRequest $request, Role\Edit\Handler $handler)
-    {
+    public function edit(
+        string $roleId,
+        Requests\Role\UpdateRoleRequest $request,
+        Role\Edit\Handler $handler
+    ) {
         $command = new Role\Edit\Command(
             $roleId,
             $request->get('name'),
@@ -185,10 +191,12 @@ class RolesController extends Controller
         ], 200);
     }
 
+
     /**
-     * Edit a new role.
+     * @param string $roleId
+     * @param Role\Remove\Handler $handler
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(string $roleId, Role\Remove\Handler $handler)
     {
@@ -272,6 +280,13 @@ class RolesController extends Controller
         ], 200);
     }
 
+    /**
+     * @param string $permissionId
+     * @param Requests\Role\DoChildRoleRequest $request
+     * @param Role\DoChild\Handler $handler
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function doChild(
         string $permissionId,
         Requests\Role\DoChildRoleRequest $request,
@@ -296,10 +311,15 @@ class RolesController extends Controller
         ], 200);
     }
 
+    /**
+     * @param string $permissionId
+     * @param Role\DoRoot\Handler $handler
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function doRoot(
         string $permissionId,
         Role\DoRoot\Handler $handler
-
     ) {
         $command = new Role\DoRoot\Command(
             $permissionId,

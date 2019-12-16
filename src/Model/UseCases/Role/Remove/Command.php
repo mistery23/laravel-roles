@@ -1,7 +1,8 @@
 <?php
 
-namespace Mistery23\LaravelRoles\Model\UseCases\Role\Remove;
+declare(strict_types=1);
 
+namespace Mistery23\LaravelRoles\Model\UseCases\Role\Remove;
 
 /**
  * Class Command
@@ -24,5 +25,4 @@ class Command
     {
         $this->id = $id;
     }
-
 }

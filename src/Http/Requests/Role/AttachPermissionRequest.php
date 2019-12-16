@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Mistery23\LaravelRoles\App\Http\Requests\Role;
 
 use Illuminate\Foundation\Http\FormRequest;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mistery23\LaravelRoles\Model\UseCases\Role\DoRoot;
 
 /**

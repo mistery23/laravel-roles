@@ -4,6 +4,9 @@ namespace Mistery23\LaravelRoles\Contracts;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+/**
+ * Interface PermissionHasRelations
+ */
 interface PermissionHasRelations
 {
     /**

@@ -64,7 +64,6 @@ class RoleQueries implements RoleQueriesInterface
                 config('roles.usersTable') . '.id',
                 '=',
                 config('roles.roleUserTable') . '.user_id'
-
             )
             ->where(config('roles.roleUserTable') . '.user_id', $userId)
             ->get()

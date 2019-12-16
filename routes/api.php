@@ -10,7 +10,7 @@
 Route::group([
     'as'            => 'laravelroles::',
     'namespace'     => '\Mistery23\LaravelRoles\App\Http\Controllers\Api',
-], function () {
+], static function () {
 
     // Roles
     Route::get('/roles', 'RolesController@index');

@@ -177,6 +177,10 @@ class Role extends Model implements RoleHasRelationsContract
             $role->attachPermission($permId);
         });
 
+        if (null !== $this->parent_id) {
+            $role->doChild($this->parent_id);
+        }
+
         return $role;
     }
 

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Mistery23\LaravelRoles\Model\UseCases\Role\Edit;
 
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Support\Facades\DB;
 use Mistery23\LaravelRoles\Model\Entity\Role;
 use Mistery23\LaravelRoles\Model\ReadModels\RoleQueriesInterface;
+use Webmozart\Assert\Assert;
 
 /**
  * Class Handler
@@ -15,7 +17,7 @@ class Handler
 {
 
     /**
-     * @var \Illuminate\Database\ConnectionInterface
+     * @var ConnectionInterface
      */
     private $db;
 
@@ -49,13 +51,16 @@ class Handler
     /**
      * @param Command $command
      *
-     * @throws \RuntimeException
-     *
      * @return void
+     *
+     * @throws \PDOException
+     * @throws \RuntimeException
      */
     public function handle(Command $command): void
     {
         $role = $this->queries->getById($command->id);
+
+        Assert::notNull($role, 'Role is not found.');
 
         $role->edit(
             $command->name,

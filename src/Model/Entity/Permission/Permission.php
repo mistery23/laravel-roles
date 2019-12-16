@@ -26,8 +26,7 @@ use Webmozart\Assert\Assert;
  */
 class Permission extends Model implements PermissionHasRelationsContract
 {
-    use DatabaseTraits, PermissionHasRelations, SoftDeletes;
-    use HasRecursiveRelationships;
+    use DatabaseTraits, HasRecursiveRelationships, PermissionHasRelations, SoftDeletes;
 
     /**
      * The attributes that should be mutated to dates.
@@ -74,12 +73,6 @@ class Permission extends Model implements PermissionHasRelationsContract
      */
     public $keyType = 'string';
 
-    /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
-    public $timestamps = true;
 
     /**
      * Create a new model instance.
@@ -91,14 +84,6 @@ class Permission extends Model implements PermissionHasRelationsContract
         parent::__construct($attributes);
 
         $this->table = config('roles.permissionsTable');
-    }
-
-    /**
-     * @return string
-     */
-    public function getParentKeyName()
-    {
-        return 'parent_id';
     }
 
     /**
@@ -171,6 +156,8 @@ class Permission extends Model implements PermissionHasRelationsContract
     public function remove(): void
     {
         Assert::null($this->deleted_at, 'Permission already deleted');
+
+        $this->deleted_at = Carbon::now();
     }
 
     /**

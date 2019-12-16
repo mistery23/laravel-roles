@@ -1,7 +1,8 @@
 <?php
 
-namespace Mistery23\LaravelRoles\Model\UseCases\Permission\Edit;
+declare(strict_types=1);
 
+namespace Mistery23\LaravelRoles\Model\UseCases\Permission\Edit;
 
 /**
  * Class Command
@@ -25,19 +26,19 @@ class Command
     public $slug;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public $model = null;
-
-    /**
-     * @var string
-     */
-    public $parentId = null;
+    public $model;
 
     /**
      * @var string|null
      */
-    public $description = null;
+    public $parentId;
+
+    /**
+     * @var string|null
+     */
+    public $description;
 
 
     /**
@@ -54,9 +55,9 @@ class Command
         string $id,
         string $name,
         string $slug,
-        ?string $model,
-        ?string $parentId,
-        ?string $description
+        ?string $model = null,
+        ?string $parentId = null,
+        ?string $description = null
     ) {
         $this->id          = $id;
         $this->name = $name;
@@ -65,5 +66,4 @@ class Command
         $this->parentId = $parentId;
         $this->description = $description;
     }
-
 }

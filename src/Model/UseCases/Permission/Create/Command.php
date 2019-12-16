@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mistery23\LaravelRoles\Model\UseCases\Permission\Create;
 
 /**
@@ -19,19 +21,19 @@ class Command
     public $slug;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public $model = null;
-
-    /**
-     * @var string
-     */
-    public $parentId = null;
+    public $model;
 
     /**
      * @var string|null
      */
-    public $description = null;
+    public $parentId;
+
+    /**
+     * @var string|null
+     */
+    public $description;
 
 
     /**
@@ -43,13 +45,17 @@ class Command
      * @param string|null $parentId
      * @param string|null $description
      */
-    public function __construct(string $name, string $slug, ?string $model, ?string $parentId, ?string $description)
-    {
+    public function __construct(
+        string $name,
+        string $slug,
+        ?string $model = null,
+        ?string $parentId = null,
+        ?string $description = null
+    ) {
         $this->name = $name;
         $this->slug = $slug;
         $this->model = $model;
         $this->parentId = $parentId;
         $this->description = $description;
     }
-
 }
