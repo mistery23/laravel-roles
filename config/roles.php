@@ -27,16 +27,16 @@ return [
     |--------------------------------------------------------------------------
     |
     | If you want, you can replace default models from this package by models
-    | you created. Have a look at `Mistery23\LaravelRoles\Models\Role` model and
-    | `Mistery23\LaravelRoles\Models\Permission` model.
+    | you created. Have a look at `Mistery23\LaravelRoles\Model\Entity\Role\Role` model and
+    | `Mistery23\LaravelRoles\Model\Entity\Permission\Permission` model.
     |
     */
 
     'models' => [
         'role'           => env('ROLES_DEFAULT_ROLE_MODEL', Mistery23\LaravelRoles\Model\Entity\Role\Role::class),
         'permission'     => env('ROLES_DEFAULT_PERMISSION_MODEL', Mistery23\LaravelRoles\Model\Entity\Permission\Permission::class),
-        'permissionRole' => env('ROLES_DEFAULT_PERMISSION_MODEL', Mistery23\LaravelRoles\Model\Entity\RolePermission::class),
-        'userRole'       => env('ROLES_DEFAULT_PERMISSION_MODEL', Mistery23\LaravelRoles\Model\Entity\RoleUser::class),
+        'permissionRole' => env('ROLES_DEFAULT_ROLE_PERMISSION_MODEL', Mistery23\LaravelRoles\Model\Entity\RolePermission::class),
+        'userRole'       => env('ROLES_DEFAULT_ROLE_USER_MODEL', Mistery23\LaravelRoles\Model\Entity\RoleUser::class),
         'userPermission' => env('ROLES_DEFAULT_PERMISSION_MODEL', Mistery23\LaravelRoles\Model\Entity\PermissionUser::class),
         'defaultUser'    => env('ROLES_DEFAULT_USER_MODEL', config('auth.providers.users.model')),
     ],
@@ -56,7 +56,7 @@ return [
     | not needed for your application.
     |
     */
-    'rolesApiEnabled'               => env('ROLES_API_ENABLED', false),
+    'rolesApiEnabled'               => env('ROLES_API_ENABLED', true),
 
     // Enable `auth` middleware
     'rolesAPIAuthEnabled'           => env('ROLES_API_AUTH_ENABLED', true),
@@ -66,13 +66,5 @@ return [
 
     // Optional Roles API Middleware
     'rolesAPIMiddleware'            => env('ROLES_API_MIDDLEWARE', 'role:admin'),
-
-    // User Permissions or Role needed to create a new role
-    'rolesAPICreateNewRolesMiddlewareType'   => env('ROLES_API_CREATE_ROLE_MIDDLEWARE_TYPE', 'role'), //permissions or roles
-    'rolesAPICreateNewRolesMiddleware'       => env('ROLES_API_CREATE_ROLE_MIDDLEWARE_TYPE', 'admin'), // admin, XXX. ... or perms.XXX
-
-    // User Permissions or Role needed to create a new permission
-    'rolesAPICreateNewPermissionMiddlewareType'  => env('ROLES_API_CREATE_PERMISSION_MIDDLEWARE_TYPE', 'role'), //permissions or roles
-    'rolesAPICreateNewPermissionsMiddleware'     => env('ROLES_API_CREATE_PERMISSION_MIDDLEWARE_TYPE', 'admin'), // admin, XXX. ... or perms.XXX
 
 ];

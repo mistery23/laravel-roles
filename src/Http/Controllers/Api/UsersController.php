@@ -2,19 +2,33 @@
 
 namespace Mistery23\LaravelRoles\App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Mistery23\LaravelRoles\App\Http\Requests;
 use Mistery23\LaravelRoles\Contracts\UserQueriesInterface;
+use Mistery23\LaravelRoles\Http\Controllers\Api\AbstractController;
 use Mistery23\LaravelRoles\Model\UseCases\User;
 
-class UsersController extends Controller
+/**
+ * Class UsersController
+ */
+class UsersController extends AbstractController
 {
 
+    /**
+     * @var UserQueriesInterface
+     */
     private $queries;
 
 
+    /**
+     * UsersController constructor.
+     *
+     * @param UserQueriesInterface $queries
+     */
     public function __construct(UserQueriesInterface $queries)
     {
+        parent::__construct();
+
         $this->queries = $queries;
     }
 
@@ -23,7 +37,7 @@ class UsersController extends Controller
      * @param Requests\User\AttachRoleRequest $request
      * @param User\Attach\Role\Handler $handler
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function attachRole(
         string $userId,

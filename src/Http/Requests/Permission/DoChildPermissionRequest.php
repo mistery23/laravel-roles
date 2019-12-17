@@ -6,20 +6,15 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class DoChildPermissionRequest extends FormRequest
 {
+
+
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return bool
+     * @return boolean
      */
-    public function authorize()
+    public function authorize(): bool
     {
-//        if (config('roles.rolesGuiCreateNewRolesMiddlewareType') == 'role') {
-//            return $this->user()->hasRole(config('roles.rolesGuiCreateNewRolesMiddleware'));
-//        }
-//        if (config('roles.rolesGuiCreateNewRolesMiddlewareType') == 'permissions') {
-//            return $this->user()->hasPermission(config('roles.rolesGuiCreateNewRolesMiddleware'));
-//        }
-
         return true;
     }
 
@@ -28,7 +23,7 @@ class DoChildPermissionRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'parent_id' => 'required|string|max:64',

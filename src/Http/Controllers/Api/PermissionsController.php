@@ -2,16 +2,16 @@
 
 namespace Mistery23\LaravelRoles\App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Mistery23\LaravelRoles\App\Http\Requests;
+use Mistery23\LaravelRoles\Http\Controllers\Api\AbstractController;
 use Mistery23\LaravelRoles\Model\ReadModels\PermissionQueriesInterface;
 use Mistery23\LaravelRoles\Model\UseCases\Permission;
 
 /**
  * Class PermissionsController
  */
-class PermissionsController extends Controller
+class PermissionsController extends AbstractController
 {
 
     /**
@@ -27,6 +27,8 @@ class PermissionsController extends Controller
      */
     public function __construct(PermissionQueriesInterface $queries)
     {
+        parent::__construct();
+
         $this->queries = $queries;
     }
 

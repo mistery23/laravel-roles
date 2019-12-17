@@ -4,23 +4,20 @@ namespace Mistery23\LaravelRoles\App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class AttachRoleRequest
+ */
 class AttachRoleRequest extends FormRequest
 {
+
 
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return bool
+     * @return boolean
      */
-    public function authorize()
+    public function authorize(): bool
     {
-//        if (config('roles.rolesGuiCreateNewRolesMiddlewareType') == 'role') {
-//            return $this->user()->hasRole(config('roles.rolesGuiCreateNewRolesMiddleware'));
-//        }
-//        if (config('roles.rolesGuiCreateNewRolesMiddlewareType') == 'permissions') {
-//            return $this->user()->hasPermission(config('roles.rolesGuiCreateNewRolesMiddleware'));
-//        }
-
         return true;
     }
 
@@ -29,7 +26,7 @@ class AttachRoleRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'role_id' => 'required|string',

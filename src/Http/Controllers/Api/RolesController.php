@@ -2,15 +2,16 @@
 
 namespace Mistery23\LaravelRoles\App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Mistery23\LaravelRoles\App\Http\Requests;
+use Mistery23\LaravelRoles\Http\Controllers\Api\AbstractController;
 use Mistery23\LaravelRoles\Model\ReadModels\RoleQueriesInterface;
 use Mistery23\LaravelRoles\Model\UseCases\Role;
 
 /**
  * Class RolesController
  */
-class RolesController extends Controller
+class RolesController extends AbstractController
 {
 
     /**
@@ -21,16 +22,19 @@ class RolesController extends Controller
 
     /**
      * RolesController constructor.
+     *
      * @param RoleQueriesInterface $queries
      */
     public function __construct(RoleQueriesInterface $queries)
     {
+        parent::__construct();
+
         $this->queries = $queries;
     }
 
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index()
     {

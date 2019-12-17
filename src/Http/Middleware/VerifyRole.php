@@ -2,7 +2,6 @@
 
 namespace Mistery23\LaravelRoles\App\Http\Middleware;
 
-use Closure;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Mistery23\LaravelRoles\App\Exceptions\RoleDeniedException;
@@ -35,7 +34,7 @@ class VerifyRole
      *
      * @return mixed
      */
-    public function handle($request, Closure $next, $role)
+    public function handle($request, \Closure $next, $role)
     {
         if ($this->auth->check() && $this->auth->user()->hasRole($role)) {
             return $next($request);
