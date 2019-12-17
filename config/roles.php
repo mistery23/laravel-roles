@@ -46,6 +46,8 @@ return [
         'userQueries'    => env('USER_QUERIES', \App\Model\User\Entity\User\Repository\UserQueries::class),
     ],
 
+    'defaultSeparator' => '.',
+
     /*
     |--------------------------------------------------------------------------
     | Laravel Roles API Settings

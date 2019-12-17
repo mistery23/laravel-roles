@@ -12,7 +12,7 @@
     - [Migrations and Seeds](#migrations-and-seeds)
 - [Usage](#usage)
     - [Creating Roles](#creating-roles)
-    - [Attaching, Detaching and Syncing Roles](#attaching-detaching-and-syncing-roles)
+    - [Attaching, Detaching Roles and Permissions](#attaching-detaching-role-and-permissions)
     - [Assign a user role to new registered users](#assign-a-user-role-to-new-registered-users)
     - [Checking For Roles](#checking-for-roles)
     - [Levels](#levels)
@@ -25,7 +25,6 @@
     - [Middleware](#middleware)
 - [Configuration](#configuration)
     - [Environment File](#environment-file)
-- [More Information](#more-information)
 - [Optional API Routes](#optional-api-routes)
 - [File Tree](#file-tree)
 - [License](#license)
@@ -43,9 +42,9 @@ Supports Laravel 5.8, and 6.0.
 |Permissions with relationships to users and levels|
 |Extended role and permission|
 |Soft deletes with full restore and destroy|
-|Optional CRUD of Roles and Permissions|
+|Optional Api methods for manage Roles and Permissions|
 |Lots of [configuration](#configuration) options|
-|Lots of [configuration](#configuration) seed|
+|Lots of [configuration](#configuration-seed-data) seed|
 |All Extendable from [.env](#environment-file)
 
 ## Installation
@@ -347,29 +346,6 @@ There are four Blade extensions. Basically, it is replacement for classic if sta
 ### Middleware
 This package comes with `VerifyRole`, `VerifyPermission` and `VerifyLevel` middleware.
 The middleware aliases are already registered in `\Mistery23\LaravelRoles\RolesServiceProvider`.
-You can optionally add them inside your `App/Http/Kernel.php` file with your own aliases like outlined below:
-
-```php
-/**
- * The application's route middleware.
- *
- * @var array
- */
-protected $routeMiddleware = [
-    'auth' => \App\Http\Middleware\Authenticate::class,
-    'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-    'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
-    'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
-    'can' => \Illuminate\Auth\Middleware\Authorize::class,
-    'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-    'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
-    'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-    'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-    'role'          => \Mistery23\LaravelRoles\Middleware\VerifyRole::class,
-    'permission'    => \Mistery23\LaravelRoles\Middleware\VerifyPermission::class,
-    'level'         => \Mistery23\LaravelRoles\Middleware\VerifyLevel::class,
-];
-```
 
 Now you can easily protect your routes.
 
@@ -488,6 +464,9 @@ return [
         'userRepository' => env('USER_REPOSITORY', \App\Model\User\Entity\User\Repository\UserRepository::class),
         'userQueries'    => env('USER_QUERIES', \App\Model\User\Entity\User\Repository\UserQueries::class),
     ],
+
+    'defaultSeparator' => '.',
+
 
     /*
     |--------------------------------------------------------------------------
@@ -628,9 +607,6 @@ USER_REPOSITORY=App\Model\User\Repository\UserRepository
 USER_QUERIES=App\Model\User\Repository\UserQueries
 
 ```
-
-## More Information
-For more information, please have a look at [HasRoleAndPermission](https://github.com/jeremykenedy/laravel-roles/blob/master/src/Contracts/HasRoleAndPermission.php) contract.
 
 ## Optional API Routes
 ```

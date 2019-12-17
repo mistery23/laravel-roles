@@ -90,6 +90,8 @@ trait HasRoleAndPermission
      * @param string $permissionId
      *
      * @return void
+     *
+     * @throws \Exception
      */
     public function attachPermission(string $permissionId): void
     {
@@ -136,13 +138,13 @@ trait HasRoleAndPermission
     /**
      * Check if the user has at least one of the given roles.
      *
-     * @param int|string|array $role
+     * @param string|array $roles
      *
-     * @return bool
+     * @return boolean
      */
-    public function hasOneRole($role): bool
+    public function hasOneRole($roles): bool
     {
-        foreach ($this->getArrayFrom($role) as $role) {
+        foreach ($this->getArrayFrom($roles) as $role) {
             if ($this->checkRole($role)) {
                 return true;
             }
@@ -154,13 +156,13 @@ trait HasRoleAndPermission
     /**
      * Check if the user has all roles.
      *
-     * @param int|string|array $role
+     * @param string|array $roles
      *
-     * @return bool
+     * @return boolean
      */
-    public function hasAllRoles($role): bool
+    public function hasAllRoles($roles): bool
     {
-        foreach ($this->getArrayFrom($role) as $role) {
+        foreach ($this->getArrayFrom($roles) as $role) {
             if (!$this->checkRole($role)) {
                 return false;
             }
@@ -187,11 +189,11 @@ trait HasRoleAndPermission
      * Check if the user has a permission or permissions.
      *
      * @param int|string|array $permission
-     * @param bool             $all
+     * @param boolean          $all
      *
-     * @return bool
+     * @return boolean
      */
-    public function hasPermission($permission, $all = false)
+    public function hasPermission($permission, $all = false): bool
     {
         if (!$all) {
             return $this->hasOnePermission($permission);
@@ -203,13 +205,13 @@ trait HasRoleAndPermission
     /**
      * Check if the user has at least one of the given permissions.
      *
-     * @param int|string|array $permission
+     * @param string|array $permissions
      *
-     * @return bool
+     * @return boolean
      */
-    public function hasOnePermission($permission)
+    public function hasOnePermission($permissions): bool
     {
-        foreach ($this->getArrayFrom($permission) as $permission) {
+        foreach ($this->getArrayFrom($permissions) as $permission) {
             if ($this->checkPermission($permission)) {
                 return true;
             }
@@ -221,9 +223,9 @@ trait HasRoleAndPermission
     /**
      * Check if the user has all permissions.
      *
-     * @param int|string|array $permissions
+     * @param string|array $permissions
      *
-     * @return bool
+     * @return boolean
      */
     public function hasAllPermissions($permissions): bool
     {
@@ -239,11 +241,11 @@ trait HasRoleAndPermission
     /**
      * Check if the user has a permission.
      *
-     * @param int|string $permission
+     * @param string $permission
      *
      * @return boolean
      */
-    public function checkPermission($permission)
+    public function checkPermission($permission): bool
     {
         $queries = app(PermissionQueriesInterface::class);
 
@@ -295,11 +297,11 @@ trait HasRoleAndPermission
      * @param boolean   $owner
      * @param string $ownerColumn
      *
-     * @return bool
+     * @return boolean
      */
-    public function allowed($providedPermission, Model $entity, $owner = true, $ownerColumn = 'user_id')
+    public function allowed($providedPermission, Model $entity, $owner = true, $ownerColumn = 'user_id'): bool
     {
-        if (true === $owner && $entity->{$ownerColumn} == $this->id) {
+        if (true === $owner && (string)$entity->{$ownerColumn} === (string)$this->id) {
             return true;
         }
 
@@ -312,13 +314,13 @@ trait HasRoleAndPermission
      * @param string $providedPermission
      * @param Model  $entity
      *
-     * @return bool
+     * @return boolean
      */
-    protected function isAllowed($providedPermission, Model $entity)
+    protected function isAllowed($providedPermission, Model $entity): bool
     {
-        foreach ($this->getPermissions() as $permission) {
-            if ($permission->model != '' && get_class($entity) == $permission->model
-                && ($permission->id == $providedPermission || $permission->slug === $providedPermission)
+        foreach ($this->permissions as $permission) {
+            if (!empty($permission->model) && get_class($entity) === $permission->model
+                && ((string)$permission->id === (string)$providedPermission || $permission->slug === $providedPermission)
             ) {
                 return true;
             }
@@ -330,15 +332,16 @@ trait HasRoleAndPermission
     /**
      * @param $method
      * @param $parameters
-     * @return bool
+     *
+     * @return mixed
      */
     public function callMagic($method, $parameters)
     {
-        if (starts_with($method, 'is')) {
+        if (Str::startsWith($method, 'is')) {
             return $this->hasRole(Str::snake(substr($method, 2), config('roles.separator')));
-        } elseif (starts_with($method, 'can')) {
+        } elseif (Str::startsWith($method, 'can')) {
             return $this->hasPermission(Str::snake(substr($method, 3), config('roles.separator')));
-        } elseif (starts_with($method, 'allowed')) {
+        } elseif (Str::startsWith($method, 'allowed')) {
             return $this->allowed(
                 Str::snake(substr($method, 7),
                 config('roles.separator')),
