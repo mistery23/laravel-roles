@@ -1,6 +1,6 @@
 {
     "name": "mistery23/laravel-roles",
-    "version": "1.0.0",
+    "version": "3.0.2",
     "description": "Powerful package for handling roles, permissions, and levels in Laravel.",
     "keywords": [
         "laravel-roles",
