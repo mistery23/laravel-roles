@@ -69,7 +69,7 @@ class UsersController extends AbstractController
      * @param Requests\User\DetachRoleRequest $request
      * @param User\Detach\Role\Handler $handler
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function detachRole(
         string $userId,
@@ -101,7 +101,7 @@ class UsersController extends AbstractController
      * @param Requests\User\AttachPermissionRequest $request
      * @param User\Attach\Permission\Handler $handler
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function attachPermission(
         string $userId,
@@ -133,7 +133,7 @@ class UsersController extends AbstractController
      * @param Requests\User\DetachPermissionRequest $request
      * @param User\Detach\Permission\Handler $handler
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function detachPermission(
         string $userId,

@@ -65,7 +65,7 @@ trait HasRoleAndPermission
 
         Assert::false($flag, 'Role is already attached');
 
-        $this->roles->add(RoleUser::new($this->id, $roleId));
+        $this->roles->add(RoleUser::new((string)$this->id, $roleId));
     }
 
     /**
@@ -97,7 +97,7 @@ trait HasRoleAndPermission
 
         Assert::false($flag, 'Permission is already attached');
 
-        $this->permissions->add(PermissionUser::new($this->id, $permissionId));
+        $this->permissions->add(PermissionUser::new((string)$this->id, $permissionId));
     }
 
     /**
