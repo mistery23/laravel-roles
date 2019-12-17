@@ -37,7 +37,7 @@ return [
         'permission'     => env('ROLES_DEFAULT_PERMISSION_MODEL', Mistery23\LaravelRoles\Model\Entity\Permission\Permission::class),
         'permissionRole' => env('ROLES_DEFAULT_ROLE_PERMISSION_MODEL', Mistery23\LaravelRoles\Model\Entity\RolePermission::class),
         'userRole'       => env('ROLES_DEFAULT_ROLE_USER_MODEL', Mistery23\LaravelRoles\Model\Entity\RoleUser::class),
-        'userPermission' => env('ROLES_DEFAULT_PERMISSION_MODEL', Mistery23\LaravelRoles\Model\Entity\PermissionUser::class),
+        'userPermission' => env('ROLES_DEFAULT_PERMISSION_USER_MODEL', Mistery23\LaravelRoles\Model\Entity\PermissionUser::class),
         'defaultUser'    => env('ROLES_DEFAULT_USER_MODEL', config('auth.providers.users.model')),
     ],
 
