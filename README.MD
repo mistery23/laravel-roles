@@ -10,7 +10,6 @@
     - [Publish Specific Assets](#publish-specific-assets)
     - [HasRoleAndPermission Trait And Contract](#hasroleandpermission-trait-and-contract)
     - [Migrations and Seeds](#migrations-and-seeds)
-    - [Migrate from Bican roles](#Migrate-from-bican-roles)
 - [Usage](#usage)
     - [Creating Roles](#creating-roles)
     - [Attaching, Detaching and Syncing Roles](#attaching-detaching-and-syncing-roles)
@@ -29,7 +28,6 @@
 - [More Information](#more-information)
 - [Optional API Routes](#optional-api-routes)
 - [File Tree](#file-tree)
-- [Opening an Issue](#opening-an-issue)
 - [License](#license)
 
 ## About
@@ -59,10 +57,8 @@ From your projects root folder in terminal run:
 Laravel 5.8 and up use:
 
 ```
-    composer require jeremykenedy/laravel-roles
+    composer require mistery23/laravel-roles
 ```
-
-* Note: The major difference is that Laravel's users table migration out the box changed from `$table->increments('id');` to `$table->bigIncrements('id');` in Laravel 5.8.
 
 ### Service Provider
 * Laravel 5.8 and up
@@ -96,7 +92,7 @@ Uses package auto discovery feature, no need to edit the `config/app.php` file.
 
 1. Include `HasRoleAndPermission` trait and also implement `HasRoleAndPermission` contract inside your `User` model. See example below.
 
-2. Include `use jeremykenedy\LaravelRoles\Traits\HasRoleAndPermission;` in the top of your `User` model below the namespace and implement the `HasRoleAndPermission` trait. See example below.
+2. Include `use Mistery23\LaravelRoles\Traits\HasRoleAndPermission;` in the top of your `User` model below the namespace and implement the `HasRoleAndPermission` trait. See example below.
 
 Example `User` model Trait And Contract:
 
@@ -152,8 +148,8 @@ For this you should use complete use cases:
 |Slug| admin|
 |Description| Admin role|
 |Level| 90|
-|Parent|root
-|Permissions|portal.administrate
+|Parent| root|
+|Permissions| portal.administrate|
 
 |Property|Value|
 |----|----|
@@ -162,7 +158,7 @@ For this you should use complete use cases:
 |Description| Manager role|
 |Level| 70|
 |Parent|admin|
-|Permissions|portal.user.manage, portal.user.manage.create
+|Permissions|portal.user.manage, portal.user.manage.create|
 
 |Property|Value|
 |----|----|
@@ -183,32 +179,20 @@ For this you should use complete use cases:
 |name|Portal manage user|
 |slug|portal.user.manage|
 |description|Can manage user|
-|parent|portal.administrate
+|parent|portal.administrate|
 
 |Property|Value|
 |----|----|
 |name|Portal user create|
 |slug|portal.user.manage.create|
 |description|Can user create|
-|parent|portal.user.manage.create
+|parent|portal.user.manage.create|
 
 |Property|Value|
 |----|----|
 |name|Portal client|
 |slug|portal.use|
 |description|Can use portal|
-
-
-### And that's it!
-
----
-
-## Migrate from bican roles
-If you migrate from bican/roles to jeremykenedy/LaravelRoles you will need to update a few things.
-- Change all calls to `can`, `canOne` and `canAll` to `hasPermission`, `hasOnePermission`, `hasAllPermissions`.
-- Change all calls to `is`, `isOne` and `isAll` to `hasRole`, `hasOneRole`, `hasAllRoles`.
-
----
 
 ## Usage
 
@@ -839,23 +823,6 @@ For more information, please have a look at [HasRoleAndPermission](https://githu
 
 * Tree command can be installed using brew: `brew install tree`
 * File tree generated using command `tree -a -I '.idea|.git|node_modules|vendor|storage|tests|composer.lock'`
-
-## Opening an Issue
-Before opening an issue there are a couple of considerations:
-* A **star** on this project shows support and is way to say thank you to all the contributors. If you open an issue without a star, *your issue may be closed without consideration.* Thank you for understanding and the support. You are all awesome!
-* **Read the instructions** and make sure all steps were *followed correctly*.
-* **Check** that the issue is not *specific to your development environment* setup.
-* **Provide** *duplication steps*.
-* **Attempt to look into the issue**, and if you *have a solution, make a pull request*.
-* **Show that you have made an attempt** to *look into the issue*.
-* **Check** to see if the issue you are *reporting is a duplicate* of a previous reported issue.
-* **Following these instructions show me that you have tried.**
-* If you have a questions send me an email to jeremykenedy@gmail.com
-* Need some help, I can do my best on Slack: https://opensourcehelpgroup.slack.com
-* Please be considerate that this is an open source project that I provide to the community for FREE when opening an issue.
-
-## Credit Note:
-The [HasRoleAndPermission Trait And Contract](#hasroleandpermission-trait-and-contract) is and an adaptation of [romanbican/roles](https://github.com/romanbican/roles). I liked the method he made so I used them.
 
 ## License
 This package is free software distributed under the terms of the [MIT license](https://opensource.org/licenses/MIT). Enjoy!
