@@ -4,10 +4,10 @@ namespace Mistery23\LaravelRoles\Model\Entity\Role;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Mistery23\Flusher\Flusher;
 use Mistery23\LaravelRoles\Contracts\RoleHasRelations as RoleHasRelationsContract;
 use Mistery23\LaravelRoles\Traits\DatabaseTraits;
 use Mistery23\LaravelRoles\Traits\RoleHasRelations;
-use Mistery23\EloquentSmartPushRelations\SmartPushRelations;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 use Webmozart\Assert\Assert;
 
@@ -26,8 +26,7 @@ use Webmozart\Assert\Assert;
  */
 class Role extends Model implements RoleHasRelationsContract
 {
-    use DatabaseTraits, RoleHasRelations, SmartPushRelations, SoftDeletes;
-    use HasRecursiveRelationships;
+    use DatabaseTraits, Flusher, RoleHasRelations, HasRecursiveRelationships, SoftDeletes;
 
     /**
      * The attributes that should be mutated to dates.

@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Mistery23\Flusher\Flusher;
 use Mistery23\LaravelRoles\Model\Entity\PermissionUser;
 use Mistery23\LaravelRoles\Model\Entity\RoleUser;
 use Mistery23\LaravelRoles\Model\ReadModels\PermissionQueriesInterface;
 use Mistery23\LaravelRoles\Model\ReadModels\RoleQueriesInterface;
 use Mistery23\LaravelRoles\Model\Utils\SplitterInterface;
-use Mistery23\EloquentSmartPushRelations\SmartPushRelations;
 use Webmozart\Assert\Assert;
 
 /**
@@ -21,7 +21,7 @@ use Webmozart\Assert\Assert;
  */
 trait HasRoleAndPermission
 {
-    use SmartPushRelations;
+    use Flusher;
 
 
     /**

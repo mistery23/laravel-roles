@@ -20,7 +20,7 @@ class RoleRepository implements RoleRepositoryInterface
      */
     public function add(Model $model): void
     {
-        if (false === $model->push()) {
+        if (false === $model->flush()) {
             throw new \RuntimeException('Save error.');
         }
     }
@@ -34,7 +34,7 @@ class RoleRepository implements RoleRepositoryInterface
      */
     public function update(Model $model): void
     {
-        if (false === $model->push()) {
+        if (false === $model->flush()) {
             throw new \RuntimeException('Update error.');
         }
     }

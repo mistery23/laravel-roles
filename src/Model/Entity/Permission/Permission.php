@@ -5,6 +5,7 @@ namespace Mistery23\LaravelRoles\Model\Entity\Permission;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Mistery23\Flusher\Flusher;
 use Mistery23\LaravelRoles\Contracts\PermissionHasRelations as PermissionHasRelationsContract;
 use Mistery23\LaravelRoles\Traits\DatabaseTraits;
 use Mistery23\LaravelRoles\Traits\PermissionHasRelations;
@@ -26,7 +27,7 @@ use Webmozart\Assert\Assert;
  */
 class Permission extends Model implements PermissionHasRelationsContract
 {
-    use DatabaseTraits, HasRecursiveRelationships, PermissionHasRelations, SoftDeletes;
+    use DatabaseTraits, Flusher, HasRecursiveRelationships, PermissionHasRelations, SoftDeletes;
 
     /**
      * The attributes that should be mutated to dates.
