@@ -1,6 +1,6 @@
 <?php
 
-namespace Mistery23\LaravelRoles\Test\Unit\Builder\Permission;
+namespace Mistery23\LaravelRoles\Test\Builder\Permission;
 
 use Mistery23\LaravelRoles\Model\Entity\Permission\Permission;
 use Ramsey\Uuid\Uuid;

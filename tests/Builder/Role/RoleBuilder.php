@@ -1,6 +1,6 @@
 <?php
 
-namespace Mistery23\LaravelRoles\Test\Unit\Builder\Role;
+namespace Mistery23\LaravelRoles\Test\Builder\Role;
 
 use Mistery23\LaravelRoles\Model\Entity\Role\Role;
 use Ramsey\Uuid\Uuid;

@@ -2,9 +2,9 @@
 
 namespace Mistery23\LaravelRoles\Test\Unit\Entity\Role;
 
+use Mistery23\LaravelRoles\Test\Builder\Role\RoleBuilder;
 use Mistery23\LaravelRoles\Model\Entity\Role\Role;
 use Mistery23\LaravelRoles\Test\TestCase;
-use Mistery23\LaravelRoles\Test\Unit\Builder\Role\RoleBuilder;
 
 class CreateTest extends TestCase
 {

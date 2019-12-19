@@ -2,8 +2,8 @@
 
 namespace Mistery23\LaravelRoles\Test\Unit\Entity\Role;
 
+use Mistery23\LaravelRoles\Test\Builder\Role\RoleBuilder;
 use Mistery23\LaravelRoles\Test\TestCase;
-use Mistery23\LaravelRoles\Test\Unit\Builder\Role\RoleBuilder;
 use Ramsey\Uuid\Uuid;
 
 class NestedTest extends TestCase

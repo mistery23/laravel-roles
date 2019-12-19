@@ -2,8 +2,8 @@
 
 namespace Mistery23\LaravelRoles\Test\Unit\Entity\Permission;
 
+use Mistery23\LaravelRoles\Test\Builder\Permission\PermissionBuilder;
 use Mistery23\LaravelRoles\Test\TestCase;
-use Mistery23\LaravelRoles\Test\Unit\Builder\Permission\PermissionBuilder;
 
 class CreateTest extends TestCase
 {

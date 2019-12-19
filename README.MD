@@ -26,6 +26,7 @@
 - [Configuration](#configuration)
     - [Environment File](#environment-file)
 - [Optional API Routes](#optional-api-routes)
+- [Tests](#tests)
 - [File Tree](#file-tree)
 - [License](#license)
 
@@ -581,6 +582,11 @@ return [
     ],
 ];
 
+```
+### Tests
+
+```bash
+    docker-compose run php-cli vendor/bin/phpunit
 ```
 
 ### Environment File
