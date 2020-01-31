@@ -26,7 +26,8 @@ Route::group([
     Route::patch('/roles/{roleId}/do-root', 'RolesController@doRoot');
 
     // Permissions
-    Route::get('/permissions', 'PermissionsController@index');
+    Route::get('/permissions', 'PermissionsController@roots');
+    Route::get('/permissions/{permissionId}', 'PermissionsController@children');
     Route::post('/permissions', 'PermissionsController@store');
     Route::put('/permissions/{permissionId}', 'PermissionsController@edit');
     Route::delete('/permissions/{permissionId}', 'PermissionsController@destroy');

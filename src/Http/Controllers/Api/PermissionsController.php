@@ -33,18 +33,33 @@ class PermissionsController extends AbstractController
     }
 
     /**
-     * Return all the roles, Permissions, and Users data.
-     *
      * @return JsonResponse
      */
-    public function index()
+    public function roots()
     {
-        $roles = $this->queries->getAll();
+        $roles = $this->queries->getPermissionsRootWithChildren();
 
         return response()->json([
             'code'      => 200,
             'status'    => 'success',
-            'message'   => 'Success returning all roles',
+            'message'   => 'Success returning all root permissions',
+            'data'      => $roles,
+        ], 200);
+    }
+
+    /**
+     * @param string $permissionId
+     *
+     * @return JsonResponse
+     */
+    public function children(string $permissionId)
+    {
+        $roles = $this->queries->getPermissionChildren($permissionId);
+
+        return response()->json([
+            'code'      => 200,
+            'status'    => 'success',
+            'message'   => 'Success returning all children permissions',
             'data'      => $roles,
         ], 200);
     }

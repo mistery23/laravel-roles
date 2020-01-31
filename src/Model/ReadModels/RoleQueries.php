@@ -35,8 +35,7 @@ class RoleQueries implements RoleQueriesInterface
 
     public function getRolesRootWithChildren(int $perPage = 20): LengthAwarePaginator
     {
-        return Role::withoutTrashed()
-            ->children()
+        return Role::with('children')
             ->whereNull('parent_id')
             ->orderBy('level')
             ->paginate($perPage);
@@ -44,9 +43,8 @@ class RoleQueries implements RoleQueriesInterface
 
     public function getRoleChildren(string $roleId, int $perPage = 20): LengthAwarePaginator
     {
-        return Role::withoutTrashed()
-            ->children()
-            ->where(['id', '=', $roleId])
+        return Role::with('children')
+            ->where('parent_id', '=', $roleId)
             ->orderBy('level')
             ->paginate($perPage);
     }

@@ -45,7 +45,15 @@ interface PermissionQueriesInterface
      *
      * @return LengthAwarePaginator
      */
-    public function getAll(int $perPage = 20): LengthAwarePaginator;
+    public function getPermissionsRootWithChildren(int $perPage = 20): LengthAwarePaginator;
+
+    /**
+     * @param string  $permissionId
+     * @param integer $perPage
+     *
+     * @return LengthAwarePaginator
+     */
+    public function getPermissionChildren(string $permissionId, int $perPage = 20): LengthAwarePaginator;
 
     /**
      * @param string $userId

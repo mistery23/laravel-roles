@@ -27,7 +27,11 @@ use Webmozart\Assert\Assert;
  */
 class Permission extends Model implements PermissionHasRelationsContract
 {
-    use DatabaseTraits, Flusher, HasRecursiveRelationships, PermissionHasRelations, SoftDeletes;
+    use DatabaseTraits;
+    use Flusher;
+    use HasRecursiveRelationships;
+    use PermissionHasRelations;
+    use SoftDeletes;
 
     /**
      * The attributes that should be mutated to dates.

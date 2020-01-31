@@ -26,7 +26,11 @@ use Webmozart\Assert\Assert;
  */
 class Role extends Model implements RoleHasRelationsContract
 {
-    use DatabaseTraits, Flusher, RoleHasRelations, HasRecursiveRelationships, SoftDeletes;
+    use DatabaseTraits;
+    use Flusher;
+    use RoleHasRelations;
+    use HasRecursiveRelationships;
+    use SoftDeletes;
 
     /**
      * The attributes that should be mutated to dates.

@@ -42,11 +42,20 @@ class PermissionQueries implements PermissionQueriesInterface
         return $permission;
     }
 
-    public function getAll(int $perPage = 20): LengthAwarePaginator
+    public function getPermissionsRootWithChildren(int $perPage = 20): LengthAwarePaginator
     {
-        $permissions = Permission::withoutTrashed()->orderByDesc('created_at')->paginate($perPage);
+        return Permission::with('children')
+            ->whereNull('parent_id')
+            ->orderBy('created_at')
+            ->paginate($perPage);
+    }
 
-        return $permissions;
+    public function getPermissionChildren(string $permissionId, int $perPage = 20): LengthAwarePaginator
+    {
+        return Permission::with('children')
+            ->where('parent_id', '=', $permissionId)
+            ->orderBy('created_at')
+            ->paginate($perPage);
     }
 
     public function hasRolePermission(string $userId, string $permission): bool
