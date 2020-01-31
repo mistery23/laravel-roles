@@ -36,14 +36,31 @@ class RolesController extends AbstractController
     /**
      * @return JsonResponse
      */
-    public function index()
+    public function roots()
     {
-        $roles = $this->queries->getAll();
+        $roles = $this->queries->getRoleChildren();
 
         return response()->json([
             'code'      => 200,
             'status'    => 'success',
-            'message'   => 'Success returning all roles',
+            'message'   => 'Success returning all root roles',
+            'data'      => $roles,
+        ], 200);
+    }
+
+    /**
+     * @param string $roleId
+     *
+     * @return JsonResponse
+     */
+    public function children(string $roleId)
+    {
+        $roles = $this->queries->getRoleChildren($roleId);
+
+        return response()->json([
+            'code'      => 200,
+            'status'    => 'success',
+            'message'   => 'Success returning all children roles',
             'data'      => $roles,
         ], 200);
     }

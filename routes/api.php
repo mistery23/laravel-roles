@@ -13,7 +13,8 @@ Route::group([
 ], static function () {
 
     // Roles
-    Route::get('/roles', 'RolesController@index');
+    Route::get('/roles', 'RolesController@roots');
+    Route::get('/roles/{roleId}', 'RolesController@children');
     Route::get('/roles/{roleId}/permissions', 'RolesController@withPermissions');
     Route::post('/roles', 'RolesController@store');
     Route::put('/roles/{roleId}', 'RolesController@edit');

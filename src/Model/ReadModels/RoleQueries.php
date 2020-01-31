@@ -33,9 +33,22 @@ class RoleQueries implements RoleQueriesInterface
         return $role > 0;
     }
 
-    public function getAll(int $perPage = 20): LengthAwarePaginator
+    public function getRolesRootWithChildren(int $perPage = 20): LengthAwarePaginator
     {
-        return Role::withoutTrashed()->orderBy('level')->paginate($perPage);
+        return Role::withoutTrashed()
+            ->children()
+            ->whereNull('parent_id')
+            ->orderBy('level')
+            ->paginate($perPage);
+    }
+
+    public function getRoleChildren(string $roleId, int $perPage = 20): LengthAwarePaginator
+    {
+        return Role::withoutTrashed()
+            ->children()
+            ->where(['id', '=', $roleId])
+            ->orderBy('level')
+            ->paginate($perPage);
     }
 
     public function getAllPermissions(string $roleId, int $perPage = 20): LengthAwarePaginator

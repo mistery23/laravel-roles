@@ -46,7 +46,15 @@ interface RoleQueriesInterface
      *
      * @return LengthAwarePaginator
      */
-    public function getAll(int $perPage = 20): LengthAwarePaginator;
+    public function getRolesRootWithChildren(int $perPage = 20): LengthAwarePaginator;
+
+    /**
+     * @param string  $roleId
+     * @param integer $perPage
+     *
+     * @return LengthAwarePaginator
+     */
+    public function getRoleChildren(string $roleId, int $perPage = 20): LengthAwarePaginator;
 
     /**
      * @param string $roleId
