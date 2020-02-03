@@ -49,11 +49,12 @@ class RolesController extends AbstractController
     }
 
     /**
-     * @param string $roleId
+     * @param string                             $roleId
+     * @param Requests\Role\RolesChildrenRequest $request
      *
      * @return JsonResponse
      */
-    public function children(string $roleId)
+    public function children(string $roleId, Requests\Role\RolesChildrenRequest $request)
     {
         $roles = $this->queries->getRoleChildren($roleId);
 
